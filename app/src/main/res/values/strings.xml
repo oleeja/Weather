@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CurrentWeather</string>
+    <string name="api_key" translatable="false">98fa0b9cfe122d8fb6a87e539fcf4876</string>
+</resources>
