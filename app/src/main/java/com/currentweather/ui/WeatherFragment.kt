@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.currentweather.DefaultCoroutineContextProvider
 import com.currentweather.data.Repository
+import com.currentweather.data.model.WeatherModel
 import com.currentweather.databinding.FragmentWeatherBinding
 
 class WeatherFragment: Fragment() {
@@ -35,7 +36,7 @@ class WeatherFragment: Fragment() {
         viewModel.getViewModelLiveData().observe(viewLifecycleOwner, Observer { result ->
             when (result) {
                 is WeatherViewModel.ViewState.Success -> {
-                    Log.d("tttag", result.toString())
+                    binding.model = result.data as WeatherModel
                 }
                 is WeatherViewModel.ViewState.Error -> {
                     Log.d("tttage", result.toString())

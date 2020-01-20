@@ -12,6 +12,6 @@ interface WeatherService {
     }
 
     @GET("weather")
-    suspend fun getWeather(@Query("id") page: Int): Response<WeatherModel>
+    suspend fun getWeather(@Query("id") page: Int, @Query("appid") apiKey: String): Response<WeatherModel>
 
 }
