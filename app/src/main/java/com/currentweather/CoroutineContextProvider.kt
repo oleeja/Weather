@@ -3,7 +3,7 @@ package com.currentweather
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-interface DispatcherProvider {
+interface CoroutineContextProvider {
 
     fun main(): CoroutineDispatcher = Dispatchers.Main
     fun default(): CoroutineDispatcher = Dispatchers.Default
@@ -12,4 +12,4 @@ interface DispatcherProvider {
 
 }
 
-class DefaultDispatcherProvider : DispatcherProvider
+class DefaultCoroutineContextProvider : CoroutineContextProvider

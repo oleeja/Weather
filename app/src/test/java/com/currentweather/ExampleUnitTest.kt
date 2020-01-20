@@ -2,6 +2,7 @@ package com.currentweather
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.currentweather.data.Repository
 import com.currentweather.data.model.WeatherModel
 import com.currentweather.ui.WeatherViewModel
 import com.nhaarman.mockitokotlin2.whenever
@@ -13,7 +14,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
-import retrofit2.Response
 
 @RunWith(MockitoJUnitRunner::class)
 class WeatherViewModelTest {
@@ -28,29 +28,32 @@ class WeatherViewModelTest {
     @Mock
     private lateinit var viewStateObserver: Observer<WeatherViewModel.ViewState>
 
-    private val dispatcherProvider = TestContextProvider()
+    @Mock
+    private lateinit var repository: Repository
 
     @Mock
-    private lateinit var data: Response<WeatherModel>
+    private lateinit var data: WeatherModel
 
     private val validCityId = 2172797
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        weatherViewModel = WeatherViewModel().apply {
+        weatherViewModel = WeatherViewModel(repository,
+            TestContextProvider()
+        ).apply {
             getViewModelLiveData().observeForever(viewStateObserver)
         }
     }
 
     @Test
-    fun `should success when fetchFromServer returns proper data`() =
+    fun `should success when getData() returns proper data`() =
         testCoroutineRule.runBlockingTest {
             // Given
-            whenever(weatherViewModel.repository.getWeaterData(validCityId)).thenReturn(data)
+            whenever(repository.getWeaterData(validCityId)).thenReturn(data)
 
             // When
-            weatherViewModel.getData(dispatcherProvider)
+            weatherViewModel.getData()
 
             // Then
             verify(viewStateObserver).onChanged(WeatherViewModel.ViewState.Success(data))
@@ -60,11 +63,11 @@ class WeatherViewModelTest {
     fun `should fail when fetchFromServer throws exception`() =
         testCoroutineRule.runBlockingTest {
             // Given
-            val error = Throwable()
-            whenever(weatherViewModel.repository.getWeaterData(validCityId)).thenThrow(error)
+            val error = Exception()
+            whenever(repository.getWeaterData(validCityId)).then { throw error }
 
             // When
-            weatherViewModel.getData(dispatcherProvider)
+            weatherViewModel.getData()
 
             // Then
             verify(viewStateObserver).onChanged(WeatherViewModel.ViewState.Error(error))

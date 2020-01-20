@@ -4,14 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.currentweather.DispatcherProvider
+import com.currentweather.CoroutineContextProvider
 import com.currentweather.data.Repository
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class WeatherViewModel : ViewModel() {
+class WeatherViewModel(val repository: Repository, val coroutineContextProvider: CoroutineContextProvider) : ViewModel() {
 
-    val repository = Repository()
+    private val handler = CoroutineExceptionHandler { _, exeption ->
+        weather.value = ViewState.Error(exeption)
+    }
+
     private val cityId = 2172797
 
     private val weather by lazy {
@@ -20,12 +24,12 @@ class WeatherViewModel : ViewModel() {
 
     fun getViewModelLiveData() : LiveData<ViewState> = weather
 
-    fun getData(dispatcherProvider: DispatcherProvider){
-        viewModelScope.launch(dispatcherProvider.io()) {
-            val data = repository.getWeaterData(cityId)
-            withContext(dispatcherProvider.io()) {
-                weather.value = ViewState.Success(data)
+    fun getData()  {
+        viewModelScope.launch(handler) {
+            val data = withContext(coroutineContextProvider.io()) {
+                repository.getWeaterData(cityId)
             }
+            weather.value = ViewState.Success(data)
         }
     }
 

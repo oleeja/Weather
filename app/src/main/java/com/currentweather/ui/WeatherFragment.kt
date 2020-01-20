@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.currentweather.DefaultDispatcherProvider
+import com.currentweather.DefaultCoroutineContextProvider
+import com.currentweather.data.Repository
 import com.currentweather.databinding.FragmentWeatherBinding
 
 class WeatherFragment: Fragment() {
@@ -19,8 +20,8 @@ class WeatherFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = WeatherViewModel()
-        viewModel.getData(DefaultDispatcherProvider())
+        viewModel = WeatherViewModel(Repository(), DefaultCoroutineContextProvider())
+        viewModel.getData()
 
         val binding = FragmentWeatherBinding.inflate(inflater, container, false)
         context ?: return binding.root
