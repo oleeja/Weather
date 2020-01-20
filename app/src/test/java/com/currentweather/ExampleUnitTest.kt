@@ -1,22 +1,21 @@
 package com.currentweather
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.currentweather.data.Repository
 import com.currentweather.data.model.WeatherModel
 import com.currentweather.ui.WeatherViewModel
-import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
+import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.Response
 
+@RunWith(MockitoJUnitRunner::class)
 class WeatherViewModelTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -25,10 +24,11 @@ class WeatherViewModelTest {
     val testCoroutineRule = TestCoroutineRule()
 
     private lateinit var weatherViewModel: WeatherViewModel
-    @Mock
-    private lateinit var repository: Repository
+
     @Mock
     private lateinit var viewStateObserver: Observer<WeatherViewModel.ViewState>
+
+    private val dispatcherProvider = TestContextProvider()
 
     @Mock
     private lateinit var data: Response<WeatherModel>
@@ -39,7 +39,7 @@ class WeatherViewModelTest {
     fun setup() {
         MockitoAnnotations.initMocks(this)
         weatherViewModel = WeatherViewModel().apply {
-            getData().observeForever(viewStateObserver)
+            getViewModelLiveData().observeForever(viewStateObserver)
         }
     }
 
@@ -47,13 +47,12 @@ class WeatherViewModelTest {
     fun `should success when fetchFromServer returns proper data`() =
         testCoroutineRule.runBlockingTest {
             // Given
-            whenever(repository.getWeaterData(validCityId)).thenReturn(data)
+            whenever(weatherViewModel.repository.getWeaterData(validCityId)).thenReturn(data)
 
             // When
-            weatherViewModel.getData()
+            weatherViewModel.getData(dispatcherProvider)
 
             // Then
-            verify(viewStateObserver).onChanged(WeatherViewModel.ViewState.Loading)
             verify(viewStateObserver).onChanged(WeatherViewModel.ViewState.Success(data))
         }
 
@@ -61,14 +60,13 @@ class WeatherViewModelTest {
     fun `should fail when fetchFromServer throws exception`() =
         testCoroutineRule.runBlockingTest {
             // Given
-            val error = Error()
-            whenever(repository.getWeaterData(validCityId)).thenThrow(error)
+            val error = Throwable()
+            whenever(weatherViewModel.repository.getWeaterData(validCityId)).thenThrow(error)
 
             // When
-            weatherViewModel.getData()
+            weatherViewModel.getData(dispatcherProvider)
 
             // Then
-            verify(viewStateObserver).onChanged(WeatherViewModel.ViewState.Loading)
             verify(viewStateObserver).onChanged(WeatherViewModel.ViewState.Error(error))
         }
 }

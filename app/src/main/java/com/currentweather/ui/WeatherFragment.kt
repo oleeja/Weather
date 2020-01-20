@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.currentweather.DefaultDispatcherProvider
 import com.currentweather.databinding.FragmentWeatherBinding
 
 class WeatherFragment: Fragment() {
@@ -19,6 +20,7 @@ class WeatherFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = WeatherViewModel()
+        viewModel.getData(DefaultDispatcherProvider())
 
         val binding = FragmentWeatherBinding.inflate(inflater, container, false)
         context ?: return binding.root
@@ -29,16 +31,13 @@ class WeatherFragment: Fragment() {
     }
 
     private fun subscribeUi(binding: FragmentWeatherBinding) {
-        viewModel.weather.observe(viewLifecycleOwner, Observer { result ->
+        viewModel.getViewModelLiveData().observe(viewLifecycleOwner, Observer { result ->
             when (result) {
                 is WeatherViewModel.ViewState.Success -> {
                     Log.d("tttag", result.toString())
                 }
                 is WeatherViewModel.ViewState.Error -> {
                     Log.d("tttage", result.toString())
-                }
-                is WeatherViewModel.ViewState.Loading -> {
-
                 }
             }
         })
