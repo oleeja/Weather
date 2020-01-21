@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -7,24 +8,45 @@
             type="com.currentweather.data.model.WeatherModel"/>
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{model.name}"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{model.main.temp}"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(model.main.temp)}"/>
+<!--        <TextView-->
+<!--            android:id="@+id/name"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@{model.name}"/>-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@{model.main.temp}"/>-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@{String.valueOf(model.main.temp)}"/>-->
 
-    </LinearLayout>
+        <com.currentweather.utils.SwipeButton
+            android:id="@+id/swipe_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_gravity="center_vertical"
+            app:inner_text="SWIPE"
+            app:inner_text_color="@android:color/white"
+            app:inner_text_size="16sp"
+            app:inner_text_top_padding="16dp"
+            app:inner_text_bottom_padding="16dp"
+            app:inner_text_background="@drawable/shape_rounded"
+            app:button_image_height="56dp"
+            app:button_image_width="66dp"
+            app:button_image_disabled="@mipmap/ic_launcher"
+            app:button_image_enabled="@mipmap/ic_launcher"
+            app:button_background="@drawable/shape_button"
+            app:initial_state="disabled"
+            app:has_activate_state="true" />
+
+    </FrameLayout>
 </layout>
