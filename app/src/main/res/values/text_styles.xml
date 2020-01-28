@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BaseTextHeeboBold">
+        <item name="android:fontFamily">@font/heebo_bold</item>
+    </style>
+
+    <style name="TextHeeboLarge" parent="BaseTextHeeboBold">
+        <item name="android:textSize">34sp</item>
+    </style>
+
+    <style name="TextHeeboMedium" parent="BaseTextHeeboBold">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="TextHeeboNormalMedium" parent="BaseTextHeeboBold">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="TextHeeboNormal" parent="BaseTextHeeboBold">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextHeeboSmall" parent="BaseTextHeeboBold">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="BaseTextRobotoLight">
+        <item name="android:fontFamily">@font/roboto_light</item>
+    </style>
+
+    <style name="TextRobotoLightSmall" parent="BaseTextRobotoLight">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="BaseTextRobotoRegular">
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextRobotoRegularMediumLagre" parent="BaseTextRobotoRegular">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="TextRobotoRegularMedium" parent="BaseTextRobotoRegular">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextRobotoRegularNormal" parent="BaseTextRobotoRegular">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextRobotoRegularSmall" parent="BaseTextRobotoRegular">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextRobotoRegularTiny" parent="BaseTextRobotoRegular">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="BaseTextRobotoMedium">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextRobotoMediumSmall" parent="BaseTextRobotoMedium">
+        <item name="android:textSize">14sp</item>
+    </style>
+</resources>

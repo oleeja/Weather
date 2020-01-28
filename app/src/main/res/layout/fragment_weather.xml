@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="model"
-            type="com.currentweather.data.model.WeatherModel"/>
+            type="com.currentweather.data.model.WeatherModel" />
     </data>
 
     <FrameLayout
@@ -13,40 +14,178 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-<!--        <TextView-->
-<!--            android:id="@+id/name"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@{model.name}"/>-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@{model.main.temp}"/>-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@{String.valueOf(model.main.temp)}"/>-->
+        <!--        <TextView-->
+        <!--            android:id="@+id/name"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="@{model.name}"/>-->
+        <!--        <TextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="@{model.main.temp}"/>-->
+        <!--        <TextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="@{String.valueOf(model.main.temp)}"/>-->
 
-        <com.currentweather.utils.SwipeButton
-            android:id="@+id/swipe_btn"
+        <!--        <com.currentweather.utils.SwipeButton-->
+        <!--            android:id="@+id/swipe_btn"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="20dp"-->
+        <!--            android:layout_marginEnd="20dp"-->
+        <!--            android:layout_gravity="center_vertical"-->
+        <!--            app:inner_text="SWIPE"-->
+        <!--            app:inner_text_color="@android:color/white"-->
+        <!--            app:inner_text_size="16sp"-->
+        <!--            app:inner_text_top_padding="16dp"-->
+        <!--            app:inner_text_bottom_padding="16dp"-->
+        <!--            app:inner_text_background="@drawable/background_green_shape_rounded"-->
+        <!--            app:button_image_height="56dp"-->
+        <!--            app:button_image_width="66dp"-->
+        <!--            app:animation_end_text="ACCEPTED"-->
+
+        <!--            app:button_text_color="#32CC73"-->
+        <!--            app:button_top_padding="4dp"-->
+        <!--            app:button_bottom_padding="4dp"-->
+        <!--            app:button_right_padding="4dp"-->
+        <!--            app:button_left_padding="4dp"-->
+        <!--            app:image_top_padding="14dp"-->
+        <!--            app:image_bottom_padding="14dp"-->
+        <!--            app:image_right_padding="14dp"-->
+        <!--            app:image_left_padding="14dp"-->
+        <!--            app:initial_state="disabled"-->
+        <!--            app:button_corner_radius="24dp"-->
+        <!--            app:has_activate_state="true" />-->
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_gravity="center_vertical"
-            app:inner_text="SWIPE"
-            app:inner_text_color="@android:color/white"
-            app:inner_text_size="16sp"
-            app:inner_text_top_padding="16dp"
-            app:inner_text_bottom_padding="16dp"
-            app:inner_text_background="@drawable/shape_rounded"
-            app:button_image_height="56dp"
-            app:button_image_width="66dp"
-            app:button_image_disabled="@mipmap/ic_launcher"
-            app:button_image_enabled="@mipmap/ic_launcher"
-            app:button_background="@drawable/shape_button"
-            app:initial_state="disabled"
-            app:has_activate_state="true" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.currentweather.utils.PointInfoWindow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:pickup_name="PICKUP SPOT"
+                app:pickup_point="Rd No 55, Dhaka"
+                app:pickup_time="6"
+                app:pickup_time_background_color="@android:color/black"
+                app:pickup_time_unit="min" />
+
+            <com.currentweather.utils.PointInfoWindow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:pickup_point="Rd No 55, Dhaka"
+                app:pickup_time="5"
+                app:pickup_time_background_color="@android:color/black"
+                app:pickup_time_unit="min" />
+
+            <com.currentweather.utils.PointInfoWindow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:pickup_point="Rd No 55, Dhaka"
+                app:pickup_time="5"
+                app:pickup_time_background_color="@android:color/black"
+                app:pickup_time_unit="min"
+                app:pickup_time_visibility="false" />
+
+            <com.currentweather.utils.PhotoPointInfoWindow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:pickup_image="@android:drawable/ic_dialog_dialer"
+                app:pickup_photo_name="PICKUP SPOT"
+                app:pickup_photo_point="Rd No 55, Dhaka"
+                app:pickup_rating="4.5"
+                app:pickup_rating_visibility="false" />
+
+            <com.currentweather.utils.PhotoPointInfoWindow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:pickup_image="@android:drawable/ic_dialog_dialer"
+                app:pickup_photo_name="PICKUP SPOT"
+                app:pickup_photo_point="Rd No 55, Dhaka"
+                app:pickup_rating="4.5"
+                app:pickup_rating_visibility="true" />
+
+            <com.currentweather.utils.PhotoPointInfoWindow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:pickup_image="@android:drawable/ic_dialog_dialer"
+                app:pickup_photo_name="PICKUP SPOT"
+                app:pickup_photo_point="Rd No 55, Dhaka"
+                app:pickup_photo_visibility="false"
+                app:pickup_rating="4.5"
+                app:pickup_rating_visibility="true" />
+
+            <com.currentweather.utils.SwipeButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                app:animation_end_text="ACCEPTED"
+                app:button_bottom_padding="4dp"
+                app:button_corner_radius="24dp"
+                app:button_image_height="56dp"
+                app:button_image_width="66dp"
+                app:button_left_padding="4dp"
+                app:button_right_padding="4dp"
+                app:button_text_color="#32CC73"
+                app:button_top_padding="4dp"
+                app:has_activate_state="true"
+                app:image_bottom_padding="14dp"
+                app:image_left_padding="14dp"
+                app:image_right_padding="14dp"
+                app:image_top_padding="14dp"
+                app:initial_state="disabled"
+                app:inner_text="SWIPE"
+                app:inner_text_background="@drawable/background_green_shape_rounded"
+                app:inner_text_bottom_padding="16dp"
+                app:inner_text_color="@android:color/white"
+                app:inner_text_size="16sp"
+                app:inner_text_top_padding="16dp" />
+
+            <com.currentweather.utils.SwipeButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                app:animation_end_text="ACCEPTED"
+                app:button_bottom_padding="4dp"
+                app:button_corner_radius="24dp"
+                app:button_image_height="56dp"
+                app:button_image_width="66dp"
+                app:button_left_padding="4dp"
+                app:button_right_padding="4dp"
+                app:button_text_color="#32CC73"
+                app:button_top_padding="4dp"
+                app:has_activate_state="true"
+                app:image_bottom_padding="14dp"
+                app:image_left_padding="14dp"
+                app:image_right_padding="14dp"
+                app:image_top_padding="14dp"
+                app:initial_state="disabled"
+                app:button_image_start="@drawable/ic_double_chevron_solid"
+                app:button_image_end="@mipmap/ic_launcher"
+                app:inner_text="SWIPE"
+                app:inner_text_background="@drawable/background_green_shape_rounded"
+                app:inner_text_bottom_padding="16dp"
+                app:inner_text_color="@android:color/white"
+                app:inner_text_size="16sp"
+                app:inner_text_top_padding="16dp" />
+
+        </LinearLayout>
+</ScrollView>
 
     </FrameLayout>
 </layout>

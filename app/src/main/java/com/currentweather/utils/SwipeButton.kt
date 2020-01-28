@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
-import android.widget.LinearLayout
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -20,28 +20,74 @@ import androidx.core.content.ContextCompat
 import com.currentweather.R
 import java.util.*
 
+/* Usage example:
+         <SwipeButton
+            android:id="@+id/swipe_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_gravity="center_vertical"
+            app:inner_text="SWIPE"
+            app:inner_text_color="@android:color/white"
+            app:inner_text_size="16sp"
+            app:inner_text_top_padding="16dp"
+            app:inner_text_bottom_padding="16dp"
+            app:inner_text_background="@drawable/background_green_shape_rounded"
+            app:button_image_height="56dp"
+            app:button_image_width="66dp"
+            app:animation_end_text="ACCEPTED"
+            app:button_image_start="@drawable/ic_double_chevron_solid"
+            app:button_image_end="@mipmap/ic_launcher"
+            app:button_top_padding="4dp"
+            app:button_text_color="#32CC73"
+            app:button_bottom_padding="4dp"
+            app:button_right_padding="4dp"
+            app:button_left_padding="4dp"
+            app:image_top_padding="14dp"
+            app:image_bottom_padding="14dp"
+            app:image_right_padding="14dp"
+            app:image_left_padding="14dp"
+            app:initial_state="disabled"
+            app:button_corner_radius="24dp"
+            app:has_activate_state="true" />
+
+ */
 
 class SwipeButton : RelativeLayout {
-    private lateinit var swipeButtonInner: ViewGroup
-    private lateinit var swipeButtonBackgroundImage: CardView
-    private lateinit var swipeButtonBackgroundText: TextView
+    private val swipeButtonOuter: ViewGroup = FrameLayout(context)
+    private val swipeButtonBackground = CardView(context).apply {
+        radius = 90f
+        cardElevation = 0f
+    }
+
+    private val swipeButtonText = TextView(context).apply {
+        textSize = 20f
+        typeface = Typeface.DEFAULT_BOLD
+        gravity = Gravity.CENTER
+    }
+    private val swipeButtonImage = ImageView(context)
+
     private var initialX = 0f
+
     var isActive = false
         private set
-    private lateinit var centerText: TextView
-    private lateinit var background: ViewGroup
-    private var disabledDrawable: Drawable? = null
-    private var enabledDrawable: Drawable? = null
+
+    private val centerText = TextView(context).apply {
+        gravity = Gravity.CENTER
+    }
+    private val background = RelativeLayout(context)
+    private var startDrawable: Drawable? = null
+    private var endDrawable: Drawable? = null
     private lateinit var onStateChangeListener: (Boolean) -> Unit
     private lateinit var onActiveListener: () -> Unit
     private var collapsedWidth = 0
     private var collapsedHeight = 0
-    private var layer: LinearLayout? = null
-    private var trailEnabled = false
     private var hasActivationState = false
 
-    var i = 40
-    val timer = Timer()
+    private var endText = ""
+
+    private val timer = Timer()
 
     constructor(context: Context) : super(context) {
         init(context, null, -1, -1)
@@ -62,7 +108,11 @@ class SwipeButton : RelativeLayout {
         init(context, attrs, defStyleAttr, -1)
     }
 
-    fun setText(text: String?) {
+    /**
+     * Sets centered view text
+     * @param text text that will be centered on view
+     */
+    fun setText(text: String) {
         centerText.text = text
     }
 
@@ -70,48 +120,66 @@ class SwipeButton : RelativeLayout {
         background.background = drawable
     }
 
-    fun setSlidingButtonBackground(drawable: Drawable?) {
-        background.background = drawable
-    }
-
-    fun setDisabledDrawable(drawable: Drawable?) {
-        disabledDrawable = drawable
+    /**
+     * Drawable to set into swiped collapsed container
+     * @param drawable image for collapsed container
+     */
+    fun setStartDrawable(drawable: Drawable?) {
+        startDrawable = drawable
         if (!isActive) {
-            //swipeButtonInner.setImageDrawable(drawable)
+            swipeButtonBackground.removeAllViews()
+            swipeButtonBackground.addView(
+                swipeButtonImage, LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+            )
+            swipeButtonImage.setImageDrawable(drawable)
         }
     }
 
-    fun setButtonBackground(buttonBackground: Drawable?) {
-        if (buttonBackground != null) {
-            //swipeButtonInner.setImageDrawable(buttonBackground)
-        }
-    }
-
-    fun setEnabledDrawable(drawable: Drawable?) {
-        enabledDrawable = drawable
+    /**
+     * Drawable to set into swiped expanded container
+     * @param drawable image for expanded container
+     */
+    fun setEndDrawable(drawable: Drawable?) {
+        endDrawable = drawable
         if (isActive) {
-            //swipeButtonInner.setImageDrawable(drawable)
+            swipeButtonImage.setImageDrawable(drawable)
         }
     }
 
+    /**
+     * Called every time when state changed
+     * @param onStateChangeListener function that have Boolean parameter as indicator of state
+     */
     fun setOnStateChangeListener(onStateChangeListener: (Boolean) -> Unit) {
         this.onStateChangeListener = onStateChangeListener
     }
 
+    /**
+     * Called every time when state active
+     * @param onActiveListener function
+     */
     fun setOnActiveListener(onActiveListener: () -> Unit) {
         this.onActiveListener = onActiveListener
     }
 
-    fun setInnerTextPadding(left: Int, top: Int, right: Int, bottom: Int) {
-        centerText.setPadding(left, top, right, bottom)
-    }
+    /**
+     * Sets timer to swiped button
+     * Note: not work if image set
+     * @param timesInSeconds seconds for timer
+     */
+    fun setTimer(timesInSeconds: Int) {
+        swipeButtonText.text = timesInSeconds.toString()
 
-    fun setSwipeButtonPadding(left: Int, top: Int, right: Int, bottom: Int) {
-        swipeButtonInner.setPadding(left, top, right, bottom)
-    }
-
-    fun setHasActivationState(hasActivationState: Boolean) {
-        this.hasActivationState = hasActivationState
+        timer.schedule(object : TimerTask() {
+            var i = timesInSeconds
+            override fun run() {
+                swipeButtonText.text = i.toString()
+                if (i-- == 0) timer.cancel()
+            }
+        }, 0, 1000)
     }
 
     private fun init(
@@ -121,54 +189,21 @@ class SwipeButton : RelativeLayout {
         defStyleRes: Int
     ) {
         hasActivationState = true
-        background = RelativeLayout(context)
-        val layoutParamsView = LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        layoutParamsView.addRule(CENTER_IN_PARENT, TRUE)
+
         background.let {
-            addView(background, layoutParamsView)
-            val centerText = TextView(context)
-            this.centerText = centerText
-            centerText.gravity = Gravity.CENTER
-            val layoutParams = LayoutParams(
+            addView(background, LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).also { it.addRule(CENTER_IN_PARENT, TRUE) })
+
+            background.addView(centerText, LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            layoutParams.addRule(CENTER_IN_PARENT, TRUE)
-            background.addView(centerText, layoutParams)
-            val swipeButton = FrameLayout(context)
-            swipeButtonInner = swipeButton
-            swipeButtonBackgroundImage = CardView(context).apply {
-                radius = 90f
-                cardElevation = 0f
-            }
-            swipeButtonBackgroundText = TextView(context)
-            //TODO: Move to property
-            swipeButtonBackgroundText.text = "30"
-            swipeButtonBackgroundText.setTextColor(Color.BLACK)
-            swipeButtonBackgroundText.textSize = 20f
-            swipeButtonBackgroundText.typeface = Typeface.DEFAULT_BOLD
-            swipeButtonBackgroundText.gravity = Gravity.CENTER
+            ).also { it.addRule(CENTER_IN_PARENT, TRUE) })
 
 
-            timer.schedule(object : TimerTask() {
-                override fun run() {
-                    i--
-                    swipeButtonBackgroundText.text = i.toString()
-                }
-            }, 0, 1000)
-
-            swipeButtonInner.addView(
-                swipeButtonBackgroundImage, LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                ).apply { setMargins(20, 20, 20, 20 ) }
-            )
-
-            swipeButtonBackgroundImage.addView(
-                swipeButtonBackgroundText, LayoutParams(
+            swipeButtonBackground.addView(
+                swipeButtonText, LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
@@ -187,132 +222,154 @@ class SwipeButton : RelativeLayout {
                     R.styleable.SwipeButton_button_image_height,
                     ViewGroup.LayoutParams.WRAP_CONTENT.toFloat()
                 ).toInt()
-                trailEnabled = typedArray.getBoolean(
-                    R.styleable.SwipeButton_button_trail_enabled,
-                    false
-                )
-                val trailingDrawable = typedArray.getDrawable(
-                    R.styleable.SwipeButton_button_trail_drawable
-                )
-                val backgroundDrawable = typedArray.getDrawable(
+
+                background.background = typedArray.getDrawable(
                     R.styleable.SwipeButton_inner_text_background
+                ) ?: ContextCompat.getDrawable(
+                    context,
+                    R.drawable.background_green_shape_rounded
                 )
-                if (backgroundDrawable != null) {
-                    background.background = backgroundDrawable
-                } else {
-                    background.background = ContextCompat.getDrawable(
-                        context,
-                        R.drawable.shape_rounded
+
+                centerText.apply {
+                    text = typedArray.getText(R.styleable.SwipeButton_inner_text)
+                    setTextColor(
+                        typedArray.getColor(
+                            R.styleable.SwipeButton_inner_text_color,
+                            Color.WHITE
+                        )
+                    )
+                    textSize = convertPixelsToSp(
+                        typedArray.getDimension(R.styleable.SwipeButton_inner_text_size, 12f),
+                        context
                     )
                 }
-                if (trailEnabled) {
-                    layer = LinearLayout(context)
-                    layer?.apply {
-                        background = if (trailingDrawable != null) {
-                            trailingDrawable
-                        } else {
-                            typedArray.getDrawable(R.styleable.SwipeButton_button_background)
-                        }
-                        gravity = Gravity.START
-                        visibility = View.GONE
-                    }
-                    background.addView(layer, layoutParamsView)
-                }
-                centerText.text = typedArray.getText(R.styleable.SwipeButton_inner_text)
-                centerText.setTextColor(
-                    typedArray.getColor(
-                        R.styleable.SwipeButton_inner_text_color,
-                        Color.WHITE
-                    )
-                )
-                val textSize = convertPixelsToSp(
-                    typedArray.getDimension(R.styleable.SwipeButton_inner_text_size, 0f), context
-                )
-                if (textSize != 0f) {
-                    centerText.textSize = textSize
-                } else {
-                    centerText.textSize = 12f
-                }
-                disabledDrawable =
-                    typedArray.getDrawable(R.styleable.SwipeButton_button_image_disabled)
-                enabledDrawable =
-                    typedArray.getDrawable(R.styleable.SwipeButton_button_image_enabled)
+
+                startDrawable =
+                    typedArray.getDrawable(R.styleable.SwipeButton_button_image_start)
+
+                endDrawable =
+                    typedArray.getDrawable(R.styleable.SwipeButton_button_image_end)
+
+                startDrawable?.let { setStartDrawable(it) }
+
                 val innerTextLeftPadding = typedArray.getDimension(
                     R.styleable.SwipeButton_inner_text_left_padding, 0f
                 )
+
                 val innerTextTopPadding = typedArray.getDimension(
                     R.styleable.SwipeButton_inner_text_top_padding, 0f
                 )
+
                 val innerTextRightPadding = typedArray.getDimension(
                     R.styleable.SwipeButton_inner_text_right_padding, 0f
                 )
+
                 val innerTextBottomPadding = typedArray.getDimension(
                     R.styleable.SwipeButton_inner_text_bottom_padding, 0f
                 )
+
                 val initialState = typedArray.getInt(
                     R.styleable.SwipeButton_initial_state,
                     DISABLED
                 )
+
                 if (initialState == ENABLED) {
-                    val layoutParamsButton = LayoutParams(
+                    addView(swipeButtonOuter, LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
-                    )
-                    layoutParamsButton.addRule(ALIGN_PARENT_LEFT, TRUE)
-                    layoutParamsButton.addRule(CENTER_VERTICAL, TRUE)
-                    //add text
-                    //swipeButton.setImageDrawable(enabledDrawable)
-                    addView(swipeButton, layoutParamsButton)
+                    ).also {
+                        it.addRule(ALIGN_PARENT_LEFT, TRUE)
+                        it.addRule(CENTER_VERTICAL, TRUE)
+                    })
                     isActive = true
                 } else {
-                    val layoutParamsButton =
-                        LayoutParams(collapsedWidth, collapsedHeight)
-                    layoutParamsButton.addRule(ALIGN_PARENT_LEFT, TRUE)
-                    layoutParamsButton.addRule(CENTER_VERTICAL, TRUE)
-                    //swipeButton.setImageDrawable(disabledDrawable)
-                    addView(swipeButton, layoutParamsButton)
+                    addView(swipeButtonOuter, LayoutParams(collapsedWidth, collapsedHeight).also {
+                        it.addRule(ALIGN_PARENT_LEFT, TRUE)
+                        it.addRule(CENTER_VERTICAL, TRUE)
+                    })
                     isActive = false
                 }
+
                 centerText.setPadding(
                     innerTextLeftPadding.toInt(),
                     innerTextTopPadding.toInt(),
                     innerTextRightPadding.toInt(),
                     innerTextBottomPadding.toInt()
                 )
-                val buttonBackground = typedArray.getDrawable(
-                    R.styleable.SwipeButton_button_background
-                )
-                if (buttonBackground != null) {
-                    //swipeButtonBackgroundImage.background = buttonBackground
-                } else {
-//                    swipeButtonBackgroundImage.background = ContextCompat.getDrawable(
-//                        context,
-//                        R.drawable.shape_button
-//                    )
-                }
+
                 val buttonLeftPadding = typedArray.getDimension(
                     R.styleable.SwipeButton_button_left_padding, 0f
                 )
+
                 val buttonTopPadding = typedArray.getDimension(
                     R.styleable.SwipeButton_button_top_padding, 0f
                 )
+
                 val buttonRightPadding = typedArray.getDimension(
                     R.styleable.SwipeButton_button_right_padding, 0f
                 )
+
                 val buttonBottomPadding = typedArray.getDimension(
                     R.styleable.SwipeButton_button_bottom_padding, 0f
                 )
-                swipeButton.setPadding(
-                    buttonLeftPadding.toInt(),
-                    buttonTopPadding.toInt(),
-                    buttonRightPadding.toInt(),
-                    buttonBottomPadding.toInt()
+
+                val imageLeftPadding = typedArray.getDimension(
+                    R.styleable.SwipeButton_image_left_padding, 0f
                 )
+
+                val imageTopPadding = typedArray.getDimension(
+                    R.styleable.SwipeButton_image_top_padding, 0f
+                )
+
+                val imageRightPadding = typedArray.getDimension(
+                    R.styleable.SwipeButton_image_right_padding, 0f
+                )
+
+                val imageBottomPadding = typedArray.getDimension(
+                    R.styleable.SwipeButton_image_bottom_padding, 0f
+                )
+
+                val radius = typedArray.getDimension(
+                    R.styleable.SwipeButton_button_corner_radius, -1f
+                )
+
+                if (radius != -1f) swipeButtonBackground.radius = radius
+
+                val swipeButtonTextColor =
+                    typedArray.getColor(R.styleable.SwipeButton_button_text_color, Color.BLACK)
+                swipeButtonText.setTextColor(swipeButtonTextColor)
+
+                endText = typedArray.getString(R.styleable.SwipeButton_animation_end_text) ?: ""
+
+                swipeButtonImage.setPadding(
+                    imageLeftPadding.toInt(),
+                    imageTopPadding.toInt(),
+                    imageRightPadding.toInt(),
+                    imageBottomPadding.toInt()
+                )
+
+                swipeButtonOuter.addView(
+                    swipeButtonBackground, LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    ).also {
+                        it.setMargins(
+                            buttonLeftPadding.toInt(),
+                            buttonTopPadding.toInt(),
+                            buttonRightPadding.toInt(),
+                            buttonBottomPadding.toInt()
+                        )
+                    }
+                )
+
                 hasActivationState =
                     typedArray.getBoolean(R.styleable.SwipeButton_has_activate_state, true)
                 typedArray.recycle()
             }
             setOnTouchListener(buttonTouchListener)
+
+            //TODO: remove after debug
+            setTimer(35)
         }
     }
 
@@ -322,61 +379,53 @@ class SwipeButton : RelativeLayout {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> return !isTouchOutsideInitialPosition(
                         event,
-                        swipeButtonInner
+                        swipeButtonOuter
                     ).also {
-                        if (!it){
+                        if (!it) {
                             background.background = ContextCompat.getDrawable(
                                 context,
-                                R.drawable.shape_rounded_pressed)
-                            swipeButtonBackgroundImage.cardElevation = 20f
-//                            swipeButtonBackgroundImage.background = ContextCompat.getDrawable(
-//                                context,
-//                                R.drawable.shape_button_shadow)
+                                R.drawable.background_green_shape_rounded_pressed
+                            )
+                            swipeButtonBackground.cardElevation = 20f
                         }
                     }
                     MotionEvent.ACTION_MOVE -> {
                         background.background = ContextCompat.getDrawable(
                             context,
-                            R.drawable.shape_rounded_pressed)
-                        swipeButtonBackgroundImage.cardElevation = 20f
-//                        swipeButtonBackgroundImage.background = ContextCompat.getDrawable(
-//                            context,
-//                            R.drawable.shape_button_shadow
-//                        )
+                            R.drawable.background_green_shape_rounded_pressed
+                        )
+                        swipeButtonBackground.cardElevation = 20f
                         if (initialX == 0f) {
-                            initialX = swipeButtonInner.x
+                            initialX = swipeButtonOuter.x
                         }
-                        if (event.x > swipeButtonInner.width / 2 &&
-                            event.x + swipeButtonInner.width / 2 < width
+                        if (event.x > swipeButtonOuter.width / 2 &&
+                            event.x + swipeButtonOuter.width / 2 < width
                         ) {
-                            swipeButtonInner.x = event.x - swipeButtonInner.width / 2
+                            swipeButtonOuter.x = event.x - swipeButtonOuter.width / 2
                             centerText.alpha =
-                                1 - 1.3f * (swipeButtonInner.x + swipeButtonInner.width) / width
-                            setTrailingEffect()
+                                1 - 1.3f * (swipeButtonOuter.x + swipeButtonOuter.width) / width
                         }
-                        if (event.x + swipeButtonInner.width / 2 > width &&
-                            swipeButtonInner.x + swipeButtonInner.width / 2 < width
+                        if (event.x + swipeButtonOuter.width / 2 > width &&
+                            swipeButtonOuter.x + swipeButtonOuter.width / 2 < width
                         ) {
-                            swipeButtonInner.x = width - swipeButtonInner.width.toFloat()
+                            swipeButtonOuter.x = width - swipeButtonOuter.width.toFloat()
                         }
-                        if (event.x < swipeButtonInner.width / 2) {
-                            swipeButtonInner.x = 0f
+                        if (event.x < swipeButtonOuter.width / 2) {
+                            swipeButtonOuter.x = 0f
                         }
                         return true
                     }
                     MotionEvent.ACTION_UP -> {
                         background.background = ContextCompat.getDrawable(
                             context,
-                            R.drawable.shape_rounded)
-                        swipeButtonBackgroundImage.cardElevation = 0f
-//                        swipeButtonBackgroundImage.background = ContextCompat.getDrawable(
-//                            context,
-//                            R.drawable.shape_button
-//                        )
+                            R.drawable.background_green_shape_rounded
+                        )
+                        swipeButtonBackground.cardElevation = 0f
+
                         if (isActive) {
                             collapseButton()
                         } else {
-                            if (swipeButtonInner.x + swipeButtonInner.width > width * 0.9) {
+                            if (swipeButtonOuter.x + swipeButtonOuter.width > width * 0.9) {
                                 if (hasActivationState) {
                                     expandButton()
                                 } else if (::onActiveListener.isInitialized) {
@@ -395,33 +444,62 @@ class SwipeButton : RelativeLayout {
         }
 
     private fun expandButton() {
-        val positionAnimator = ValueAnimator.ofFloat(swipeButtonInner.x, 0f)
+        val positionAnimator = ValueAnimator.ofFloat(swipeButtonOuter.x, 0f)
         positionAnimator.addUpdateListener {
             val x = positionAnimator.animatedValue as Float
-            swipeButtonInner.x = x
+            swipeButtonOuter.x = x
         }
         val widthAnimator = ValueAnimator.ofInt(
-            swipeButtonInner.width,
+            swipeButtonOuter.width,
             width
-        )
-        widthAnimator.addUpdateListener {
-            val params = swipeButtonInner.layoutParams
-            params.width = (widthAnimator.animatedValue as Int)
-            swipeButtonInner.layoutParams = params
+        ).apply {
+            interpolator = AccelerateDecelerateInterpolator()
         }
+        widthAnimator.addUpdateListener {
+            val params = swipeButtonOuter.layoutParams
+            params.width = (widthAnimator.animatedValue as Int)
+            swipeButtonOuter.layoutParams = params
+        }
+
+        val textAnimator = ObjectAnimator.ofFloat(
+            swipeButtonText, "alpha", 0f
+        ).apply {
+            var playingOnce = false
+            duration = 300
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?, isReverse: Boolean) {
+                    super.onAnimationEnd(animation)
+                    timer.cancel()
+                    swipeButtonText.text = endText
+                    if (!playingOnce) {
+                        playingOnce = true
+                        ObjectAnimator.ofFloat(
+                            swipeButtonText, "alpha", 1f
+                        ).apply { duration = 300 }.start()
+                    }
+                }
+
+            })
+        }
+
         val animatorSet = AnimatorSet()
         animatorSet.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
-                super.onAnimationStart(animation, isReverse)
-            }
 
             override fun onAnimationEnd(animation: Animator) {
                 super.onAnimationEnd(animation)
                 isActive = true
-//                swipeButtonInner.setImageDrawable(enabledDrawable)
-                timer.cancel()
 
-                swipeButtonBackgroundText.text = "ACCEPTED"
+                endDrawable?.let {
+                    swipeButtonBackground.removeAllViews()
+                    swipeButtonBackground.addView(
+                        swipeButtonImage, LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
+                        )
+                    )
+                    swipeButtonImage.setImageDrawable(it)
+                }
+
                 if (::onStateChangeListener.isInitialized) {
                     onStateChangeListener.invoke(isActive)
                 }
@@ -430,26 +508,18 @@ class SwipeButton : RelativeLayout {
                 }
             }
         })
-        animatorSet.playTogether(positionAnimator, widthAnimator)
+        animatorSet.playTogether(positionAnimator, widthAnimator, textAnimator)
         animatorSet.start()
     }
 
     private fun moveButtonBack() {
-        val positionAnimator = ValueAnimator.ofFloat(swipeButtonInner.x, 0f)
+        val positionAnimator = ValueAnimator.ofFloat(swipeButtonOuter.x, 0f)
         positionAnimator.interpolator = AccelerateDecelerateInterpolator()
         positionAnimator.addUpdateListener {
             val x = positionAnimator.animatedValue as Float
-            swipeButtonInner.x = x
-            setTrailingEffect()
+            swipeButtonOuter.x = x
         }
-        positionAnimator.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                super.onAnimationEnd(animation)
-                if (layer != null) {
-                    layer!!.visibility = View.GONE
-                }
-            }
-        })
+
         val objectAnimator = ObjectAnimator.ofFloat(
             centerText, "alpha", 1f
         )
@@ -461,28 +531,25 @@ class SwipeButton : RelativeLayout {
 
     private fun collapseButton() {
         val finalWidth = if (collapsedWidth == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            swipeButtonInner.height
+            swipeButtonOuter.height
         } else {
             collapsedWidth
         }
         val widthAnimator =
-            ValueAnimator.ofInt(swipeButtonInner.width, finalWidth)
+            ValueAnimator.ofInt(swipeButtonOuter.width, finalWidth)
         widthAnimator.addUpdateListener {
-            val params = swipeButtonInner.layoutParams
+            val params = swipeButtonOuter.layoutParams
             params.width = (widthAnimator.animatedValue as Int)
-            swipeButtonInner.layoutParams = params
-            setTrailingEffect()
+            swipeButtonOuter.layoutParams = params
         }
         widthAnimator.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 super.onAnimationEnd(animation)
                 isActive = false
-//                swipeButtonInner.setImageDrawable(disabledDrawable)
+                swipeButtonText.text = ""
+                startDrawable?.let { setStartDrawable(startDrawable) }
                 if (::onStateChangeListener.isInitialized) {
                     onStateChangeListener.invoke(isActive)
-                }
-                if (layer != null) {
-                    layer!!.visibility = View.GONE
                 }
             }
         })
@@ -492,16 +559,6 @@ class SwipeButton : RelativeLayout {
         val animatorSet = AnimatorSet()
         animatorSet.playTogether(objectAnimator, widthAnimator)
         animatorSet.start()
-    }
-
-    private fun setTrailingEffect() {
-        if (trailEnabled) {
-            layer!!.visibility = View.VISIBLE
-            layer!!.layoutParams = LayoutParams(
-                (swipeButtonInner.x + swipeButtonInner.width / 3).toInt(),
-                centerText.height
-            )
-        }
     }
 
     fun toggleState() {

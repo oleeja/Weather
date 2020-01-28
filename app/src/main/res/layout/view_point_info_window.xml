@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/pickupTimeBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:paddingEnd="@dimen/point_view_horizontal_margin"
+        android:paddingStart="@dimen/point_view_horizontal_margin">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pickupTimeText"
+            android:layout_width="wrap_content"
+            android:layout_height="24sp"
+            android:layout_gravity="center_horizontal"
+            android:includeFontPadding="false"
+            android:textColor="@android:color/white"
+            style="@style/TextHeeboNormalMedium"
+            tools:text="6" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pickupTimeUnitText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@android:color/white"
+            style="@style/TextHeeboSmall"
+            tools:text="min" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/point_view_time_min_height"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/point_view_horizontal_margin"
+        android:paddingEnd="@dimen/point_view_horizontal_margin">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pickupNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:text="PICKUP SPOT" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pickupPointText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            tools:text="Rd No 55, Dhaka" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_chevron_right_24dp" />
+
+</LinearLayout>
