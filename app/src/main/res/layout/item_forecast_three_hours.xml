@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="model"
+            type="com.currentweather.domain.model.forecast.ForecastThreeHours" />
+    </data>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/margin_default">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:dateTime="@{model.dt}"/>
+
+        <ImageView
+            android:id="@+id/imageWeather"
+            android:layout_margin="@dimen/margin_default_half"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@{model.weather.get(0).icon}" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{model.main.temp}"/>
+
+    </LinearLayout>
+</layout>

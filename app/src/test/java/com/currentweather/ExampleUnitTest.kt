@@ -2,9 +2,9 @@ package com.currentweather
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.currentweather.data.Repository
-import com.currentweather.data.model.WeatherModel
-import com.currentweather.ui.WeatherViewModel
+import com.currentweather.data.CurrentWeatherRepositoryImpl
+import com.currentweather.domain.model.WeatherModel
+import com.currentweather.ui.main.current_weather.WeatherViewModel
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.junit.Rule
@@ -29,7 +29,7 @@ class WeatherViewModelTest {
     private lateinit var viewStateObserver: Observer<WeatherViewModel.ViewState>
 
     @Mock
-    private lateinit var repository: Repository
+    private lateinit var currentWeatherRepositoryImpl: CurrentWeatherRepositoryImpl
 
     @Mock
     private lateinit var data: WeatherModel
@@ -39,7 +39,8 @@ class WeatherViewModelTest {
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        weatherViewModel = WeatherViewModel(repository,
+        weatherViewModel = WeatherViewModel(
+            currentWeatherRepositoryImpl,
             TestContextProvider()
         ).apply {
             getViewModelLiveData().observeForever(viewStateObserver)
@@ -50,7 +51,7 @@ class WeatherViewModelTest {
     fun `should success when getData() returns proper data`() =
         testCoroutineRule.runBlockingTest {
             // Given
-            whenever(repository.getWeaterData(validCityId)).thenReturn(data)
+            whenever(currentWeatherRepositoryImpl.getWeaterData(validCityId)).thenReturn(data)
 
             // When
             weatherViewModel.getData()
@@ -64,7 +65,7 @@ class WeatherViewModelTest {
         testCoroutineRule.runBlockingTest {
             // Given
             val error = Exception()
-            whenever(repository.getWeaterData(validCityId)).then { throw error }
+            whenever(currentWeatherRepositoryImpl.getWeaterData(validCityId)).then { throw error }
 
             // When
             weatherViewModel.getData()

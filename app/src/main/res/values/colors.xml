@@ -3,4 +3,14 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="morningPrimary">#ffee58</color>
+    <color name="afternoonPrimary">#8bc34a</color>
+    <color name="eveningPrimary">#1976d2</color>
+    <color name="nightPrimary">#303f9f</color>
+
+    <color name="morningPrimaryDark">#c9bc1f</color>
+    <color name="afternoonPrimaryDark">#5a9216</color>
+    <color name="eveningPrimaryDark">#004ba0</color>
+    <color name="nightPrimaryDark">#001970</color>
 </resources>

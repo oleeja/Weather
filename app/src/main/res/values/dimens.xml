@@ -4,4 +4,11 @@
     <dimen name="point_view_image_min_width">48dp</dimen>
     <dimen name="point_view_image_min_height">52dp</dimen>
     <dimen name="point_view_time_min_height">48dp</dimen>
+
+    <dimen name="margin_default_half">8dp</dimen>
+    <dimen name="margin_default">16dp</dimen>
+    <dimen name="margin_default_and_half">24dp</dimen>
+    <dimen name="margin_default_double">32dp</dimen>
+    <dimen name="margin_default_three">48dp</dimen>
+    <dimen name="margin_default_four">64dp</dimen>
 </resources>

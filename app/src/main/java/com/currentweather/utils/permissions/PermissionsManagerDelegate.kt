@@ -5,10 +5,12 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicInteger
-
-typealias SupportFragment = androidx.fragment.app.Fragment
 
 /**
  * Delegate for [PermissionsManager]
@@ -18,25 +20,27 @@ typealias SupportFragment = androidx.fragment.app.Fragment
  * View should be one of:
  * [android.app.Activity],
  * [android.app.Fragment],
- * [SupportFragment],
  * */
 class PermissionsManagerDelegate(
-        /*private val permissionsObservable: CompositeEventListener<OnRequestPermissionsResultEvent>,*/
-        private val view: suspend () -> Any) : PermissionsManager {
+    private val permissionsObservable: CompositeEventListener<OnRequestPermissionsResultEvent>,
+    private val view: suspend () -> Any) : PermissionsManager {
 
     /**
      * @see [PermissionsManager.requestPermissions]
      * */
-    override suspend fun requestPermissions(permissions: List<String>): RequestPermissionsResult {
-        //we always use UI thread to work with permissions
-       // val result = asyncWith(UI_POOL) { requestPermissionsImpl(permissions) }.await()
-//        return result
-        return RequestPermissionsResult(emptyList(), emptyList())
-    }
+    @ExperimentalCoroutinesApi
+    override suspend fun requestPermissions(permissions: List<String>) = coroutineScope {
+            withContext(Dispatchers.Default) {
+                requestPermissionsImpl(
+                    permissions
+                )
+            }
+        }
 
     /**
      * @see [PermissionsManager.requestPermissionsOrThrow]
      * */
+    @ExperimentalCoroutinesApi
     override suspend fun requestPermissionsOrThrow(permissions: List<String>): RequestPermissionsResult {
         val result = requestPermissions(permissions)
         if (!result.isAllGranted) {
@@ -48,13 +52,13 @@ class PermissionsManagerDelegate(
     /**
      * @see [PermissionsManager.shouldShowRequestPermissionRationale]
      * */
-    override suspend fun shouldShowRequestPermissionRationale(permission: String): Boolean {
+    override suspend fun shouldShowRequestPermissionRationale(permission: String) =
         //we always use UI thread to work with permissions
-//        val result = asyncWith(UI_POOL) { shouldShowRequestPermissionRationaleImpl(permission) }
-//                .await()
-//        return result
-        return true
-    }
+       coroutineScope {
+            withContext(Dispatchers.Default) {
+                shouldShowRequestPermissionRationaleImpl(permission)
+            }
+        }
 
     /**
      * Implementation of permissions request. Should be called on UI thread
@@ -62,8 +66,9 @@ class PermissionsManagerDelegate(
      * @param permissions - list of permissions to request
      * @return [RequestPermissionsResult]
      * */
+    @ExperimentalCoroutinesApi
     @UiThread
-    private suspend fun requestPermissionsImpl(permissions: List<String>): RequestPermissionsResult {
+    suspend fun requestPermissionsImpl(permissions: List<String>): RequestPermissionsResult {
         if (!isMarshmallow() || permissions.all { isPermissionGranted(it) }) {
             return RequestPermissionsResult(grantedPermissions = permissions, deniedPermissions = emptyList())
         }
@@ -75,18 +80,16 @@ class PermissionsManagerDelegate(
         try {
             val requestCode = generateRequestCode()
 
-            val v = view()
-            when (v) {
+            when (val v = view()) {
                 is Activity -> v.requestPermissions(permissions.toTypedArray(), requestCode)
                 is Fragment -> v.requestPermissions(permissions.toTypedArray(), requestCode)
                 else -> throw IllegalStateException("View $v must be ${Activity::class.java.name} " +
                         "or ${Fragment::class.java.name} ")
             }
 
-            //wait for permissions request result
-            //val event = permissionsObservable.awaitFirst { it.requestCode == requestCode }
-            //return RequestPermissionsResult(event)
-            return RequestPermissionsResult(emptyList(), emptyList())
+//            wait for permissions request result
+            val event = permissionsObservable.awaitFirst { it.requestCode == requestCode }
+            return RequestPermissionsResult(event)
         } finally {
             REQUEST_PERMISSION_MUTEX.unlock()
         }
@@ -102,8 +105,7 @@ class PermissionsManagerDelegate(
     private suspend fun shouldShowRequestPermissionRationaleImpl(permission: String): Boolean {
         if (!isMarshmallow()) return false
 
-        val v = view()
-        return when (v) {
+        return when (val v = view()) {
             is Activity -> v.shouldShowRequestPermissionRationale(permission)
             is Fragment -> v.shouldShowRequestPermissionRationale(permission)
             else -> throw IllegalStateException("View $v must be ${Activity::class.java.name} " +
@@ -121,8 +123,7 @@ class PermissionsManagerDelegate(
     private suspend fun isPermissionGranted(permission: String): Boolean {
         if (!isMarshmallow()) return true
 
-        val v = view()
-        return when (v) {
+        return when (val v = view()) {
             is Activity -> v.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
             is Fragment -> requireNotNull(v.activity).checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
             else -> throw IllegalStateException("View $v must be ${Activity::class.java.name} " +
@@ -155,5 +156,4 @@ class PermissionsManagerDelegate(
         private val REQUEST_CODE = AtomicInteger(1)
         private val REQUEST_PERMISSION_MUTEX = Mutex()
     }
-
 }

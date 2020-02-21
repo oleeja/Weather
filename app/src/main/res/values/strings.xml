@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">CurrentWeather</string>
     <string name="api_key" translatable="false">98fa0b9cfe122d8fb6a87e539fcf4876</string>
+    <string name="weather_station">Weather station: %1$s</string>
+    <string name="updated_time">Updated time: %1$s</string>
+    <string name="weather_condition">Weather condition: %1$s</string>
+    <string name="feels_like">Feels like:</string>
+    <string name="temperature">Temperature:</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.currentweather.data.model
+package com.currentweather.domain.model
 
 import com.google.gson.annotations.SerializedName
 
@@ -12,7 +12,7 @@ data class WeatherModel(
     @SerializedName("coord")
     val coord: Coord,
     @SerializedName("dt")
-    val dt: Int,
+    val dt: Long,
     @SerializedName("id")
     val id: Int,
     @SerializedName("main")

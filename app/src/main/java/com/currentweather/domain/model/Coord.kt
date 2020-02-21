@@ -1,4 +1,4 @@
-package com.currentweather.data.model
+package com.currentweather.domain.model
 
 import com.google.gson.annotations.SerializedName
 
