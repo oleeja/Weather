@@ -6,7 +6,6 @@ import com.currentweather.domain.CurrentWeatherRepository
 import com.currentweather.domain.ForecastRepository
 import com.currentweather.domain.LocationRepository
 import com.currentweather.ui.base.BaseViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -17,10 +16,10 @@ class WeatherViewModel(
     val locationRepository: LocationRepository
 ) : BaseViewModel(), LifecycleObserver {
 
-    private val handler = CoroutineExceptionHandler { _, exeption ->
+    override fun handleException(exception: Throwable){
         weather.value =
             ViewState.Error(
-                exeption
+                exception
             )
     }
 
@@ -58,7 +57,7 @@ class WeatherViewModel(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun stopData() {
-
+        // TODO: add unsubscribeLocation
     }
 
     sealed class ViewState {

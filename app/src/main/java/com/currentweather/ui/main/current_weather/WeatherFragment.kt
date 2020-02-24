@@ -1,19 +1,23 @@
 package com.currentweather.ui.main.current_weather
 
 import android.Manifest
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.currentweather.R
@@ -38,6 +42,8 @@ class WeatherFragment : BaseFragment() {
 
     private val weatherViewModel: WeatherViewModel by viewModel()
 
+    private var menuItemColor = Color.BLACK
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,6 +52,11 @@ class WeatherFragment : BaseFragment() {
         lifecycle.addObserver(weatherViewModel)
         subscribeUi(it)
     }.root
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     private fun subscribeUi(binding: FragmentWeatherBinding) {
         GlobalScope.launch(Dispatchers.Main) {
@@ -93,13 +104,34 @@ class WeatherFragment : BaseFragment() {
         })
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_settings, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem) =
+        item.onNavDestinationSelected(findNavController()) || super.onOptionsItemSelected(item)
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.forEach {
+            val s = SpannableString(it.title)
+            s.setSpan(ForegroundColorSpan(menuItemColor), 0, s.length, 0)
+            it.title = s
+        }
+        super.onPrepareOptionsMenu(menu)
+    }
+
     private fun setBarColors(timestamp: Long) {
         context?.let {
-            (activity as AppCompatActivity).supportActionBar?.setBackgroundDrawable(
-                ColorDrawable(
-                    ContextCompat.getColor(it, getResourceBackgroundMain(timestamp))
+            (activity as AppCompatActivity).supportActionBar?.apply {
+                setBackgroundDrawable(
+                    ColorDrawable(
+                        ContextCompat.getColor(it, getResourceBackgroundMain(timestamp).also { menuItemColor = it })
+                    )
                 )
-            )
+                invalidateOptionsMenu()
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 activity?.window?.apply {
                     clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)

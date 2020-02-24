@@ -5,6 +5,7 @@ import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
+import java.util.*
 
 
 /**
@@ -19,6 +20,7 @@ class AuthInterceptor(private val accessToken: String) : Interceptor {
 
         val request: Request = original.newBuilder().url(
                 originalHttpUrl.newBuilder()
+                    .addQueryParameter("lang", Locale.getDefault().getLanguage())
                     .addQueryParameter("appid", accessToken)
                     .build())
             .build()

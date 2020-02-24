@@ -4,6 +4,7 @@ import com.currentweather.CoroutineContextProvider
 import com.currentweather.DefaultCoroutineContextProvider
 import com.currentweather.api.provideWeatherService
 import com.currentweather.data_sources.LastKnownLocationDataSource
+import com.currentweather.data_sources.UnitsDataSource
 import com.currentweather.data_sources.UpdateLocationDataSource
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -19,4 +20,5 @@ val commonModule = module{
 val dataSourceModule = module{
     single{ LastKnownLocationDataSource(get())}
     single{ UpdateLocationDataSource(get())}
+    single { UnitsDataSource() }
 }
