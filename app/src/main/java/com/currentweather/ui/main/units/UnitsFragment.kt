@@ -16,6 +16,7 @@ class UnitsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ) = FragmentUnitsBinding.inflate(inflater, container, false).also {
         lifecycle.addObserver(unitsViewModel)
+        it.model = unitsViewModel
     }.root
 
 }

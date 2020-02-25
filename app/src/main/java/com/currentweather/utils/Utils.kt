@@ -15,10 +15,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingConversion
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.currentweather.R
 import com.github.nitrico.lastadapter.BR
 import com.github.nitrico.lastadapter.LastAdapter
+import com.github.nitrico.lastadapter.Type
 import com.squareup.picasso.Picasso
 import java.util.*
 
@@ -114,7 +116,8 @@ fun rotateArrow(view: AppCompatTextView, iconRes: Drawable?, degree: Double?) {
                         }
 
                     }),
-            null, null, null)
+                null, null, null
+            )
         }
     }
 
@@ -139,13 +142,25 @@ private fun getBitmapFromVectorDrawable(drawableRes: Drawable): Bitmap? {
 fun convertTimeStampToText(view: TextView, temp: Number?) {
     val temp = "${temp?.toString() ?: "--"}°"
     view.text = temp
+
+    //convertClassKotlinToJava(com.currentweather.domain.model.Unit::class)
 }
 
-@BindingAdapter(value = ["app:items", "app:itemLayout"], requireAll = true)
-fun setRecyclerAdapter(view: RecyclerView, items: List<Any>?, itemLayoutRes: Int) {
-    items?.let {
-        LastAdapter(it, BR.model)
-            .map<Any>(itemLayoutRes)
+
+@BindingAdapter(value = ["app:items", "app:itemLayout", "app:onClick"], requireAll = true)
+fun <T : Any> setRecyclerAdapter(view: RecyclerView, items: List<Any>?, itemLayoutRes: Int, click: OnPositionClickListener) {
+    if (!items.isNullOrEmpty()) {
+        val typeClass = items[0].javaClass
+        val typeItem = Type<ViewDataBinding>(itemLayoutRes)
+            .onClick { click.onClick(it.adapterPosition)}
+
+        LastAdapter(items, BR.model)
+            .map(typeClass, typeItem)
             .into(view)
     }
+}
+
+
+interface OnPositionClickListener{
+    fun onClick(position: Int)
 }

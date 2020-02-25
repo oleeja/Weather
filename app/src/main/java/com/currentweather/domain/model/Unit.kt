@@ -4,4 +4,6 @@ data class Unit(val name: String,
                 val key: String,
                 val temperatureValue: String,
                 val speedValue: String,
-                val pressureValue: String)
+                val pressureValue: String){
+
+}

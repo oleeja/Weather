@@ -11,6 +11,7 @@
         android:id="@+id/unitsRecycler"
         android:layout_width="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:onClick="@{model.onPositionClickListener}"
         app:items="@{model.viewModelLiveData}"
         app:itemLayout="@{@layout/item_settings_unit}"
         android:layout_height="match_parent"/>
