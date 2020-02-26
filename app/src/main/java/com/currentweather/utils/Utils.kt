@@ -1,5 +1,6 @@
 package com.currentweather.utils
 
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
@@ -7,7 +8,9 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.format.DateFormat
 import android.view.View
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.appcompat.widget.AppCompatTextView
@@ -16,6 +19,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingConversion
 import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.currentweather.R
 import com.github.nitrico.lastadapter.BR
@@ -140,19 +144,22 @@ private fun getBitmapFromVectorDrawable(drawableRes: Drawable): Bitmap? {
 
 @BindingAdapter("app:temperatureText")
 fun convertTimeStampToText(view: TextView, temp: Number?) {
-    val temp = "${temp?.toString() ?: "--"}°"
-    view.text = temp
-
-    //convertClassKotlinToJava(com.currentweather.domain.model.Unit::class)
+    val temperature = "${temp?.toString() ?: "--"}°"
+    view.text = temperature
 }
 
 
 @BindingAdapter(value = ["app:items", "app:itemLayout", "app:onClick"], requireAll = true)
-fun <T : Any> setRecyclerAdapter(view: RecyclerView, items: List<Any>?, itemLayoutRes: Int, click: OnPositionClickListener) {
+fun <T : Any> setRecyclerAdapter(
+    view: RecyclerView,
+    items: List<Any>?,
+    itemLayoutRes: Int,
+    click: OnPositionClickListener?
+) {
     if (!items.isNullOrEmpty()) {
         val typeClass = items[0].javaClass
         val typeItem = Type<ViewDataBinding>(itemLayoutRes)
-            .onClick { click.onClick(it.adapterPosition)}
+            .onClick { click?.onClick(it.adapterPosition) }
 
         LastAdapter(items, BR.model)
             .map(typeClass, typeItem)
@@ -160,7 +167,31 @@ fun <T : Any> setRecyclerAdapter(view: RecyclerView, items: List<Any>?, itemLayo
     }
 }
 
+@BindingAdapter("app:orientationListener")
+fun changeOrientation(view: RecyclerView, orientation: Int) {
+    if (view.layoutManager is LinearLayoutManager) {
+        (view.layoutManager as LinearLayoutManager).let {
+            it.orientation =
+                if (orientation == Configuration.ORIENTATION_PORTRAIT) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
+            view.layoutParams.apply {
+                width = WRAP_CONTENT
+            }
+//            (view.layoutParams as ConstraintLayout.LayoutParams).apply {
+//                width = WRAP_CONTENT
+//                rightToRight = (view.parent as View).id
+//                leftToLeft = -1
+//            }
+        }
+    }
+}
 
-interface OnPositionClickListener{
+@BindingAdapter("app:orientationListener")
+fun changeOrientation(view: LinearLayout, orientation: Int) {
+    view.orientation =
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) LinearLayout.VERTICAL else LinearLayout.HORIZONTAL
+}
+
+
+interface OnPositionClickListener {
     fun onClick(position: Int)
 }

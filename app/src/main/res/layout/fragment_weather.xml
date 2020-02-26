@@ -5,150 +5,178 @@
 
     <data>
 
+        <import type="androidx.recyclerview.widget.RecyclerView" />
+
         <variable
             name="model"
-            type="com.currentweather.domain.model.WeatherModel" />
+            type="com.currentweather.ui.main.current_weather.WeatherViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/rootBackground"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:backroundColor="@{model.dt}"
-        tools:background="@color/eveningPrimary">
+        app:onRefreshListener="@{() -> model.onRefresh()}"
+        app:refreshing="@{model.isLoading}">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/updatedTimeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_default"
-            app:dateTime="@{model.dt}"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/weatherStationText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{@string/weather_station(model.name)}"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/updatedTimeText" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageWeather"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.3"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/weatherStationText"
-            app:mappedIcon="@{model.weather.get(0).icon}" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/weatherConditionText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/margin_default"
-            android:text="@{@string/weather_condition(model.weather.get(0).description)}"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageWeather" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/tempWeather"
-            android:text="@string/temperature"
-            app:layout_constraintBottom_toTopOf="@+id/tempWeather"
-            app:layout_constraintStart_toStartOf="@+id/tempWeather" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tempWeather"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_default_three"
-            app:temperatureText="@{model.main.temp}"
-            android:textSize="40sp"
-            app:layout_constraintBottom_toTopOf="@+id/feelsLikeWeather"
-            app:layout_constraintRight_toLeftOf="@+id/guidelineVertical"
-            app:layout_constraintTop_toBottomOf="@id/weatherConditionText"
-            tools:text="25" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/feelsLikeWeather"
-            android:text="@string/feels_like"
-            app:layout_constraintBottom_toTopOf="@+id/feelsLikeWeather"
-            app:layout_constraintStart_toStartOf="@+id/feelsLikeWeather" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/feelsLikeWeather"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_default_three"
-            app:temperatureText="@{model.main.feelsLike}"
-            android:textSize="40sp"
-            app:layout_constraintBottom_toTopOf="@+id/forecastRecyclerWeather"
-            app:layout_constraintRight_toLeftOf="@+id/guidelineVertical"
-            app:layout_constraintTop_toBottomOf="@id/tempWeather"
-            tools:text="25" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineVertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.65" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/humidityText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_humidity"
-            android:drawablePadding="@dimen/margin_default_half"
-            android:text="@{String.valueOf(model.main.humidity) + '%'}"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@+id/windSpeedText"
-            app:layout_constraintLeft_toRightOf="@+id/guidelineVertical"
-            tools:text="25%" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/windSpeedText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableStart="@{@drawable/ic_wind_arrow}"
-            android:drawablePadding="@dimen/margin_default_half"
-            android:text="@{model.wind.speed}"
-            android:textSize="24sp"
-            app:degree="@{model.wind.deg}"
-            tools:drawableStart="@drawable/ic_wind_arrow"
-            app:layout_constraintBottom_toTopOf="@+id/forecastRecyclerWeather"
-            app:layout_constraintLeft_toRightOf="@+id/guidelineVertical"
-            app:layout_constraintTop_toBottomOf="@id/weatherConditionText"
-            tools:text="1.5 m/s" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/pressureText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_pressure"
-            android:drawablePadding="@dimen/margin_default_half"
-            android:text="@{String.valueOf(model.main.pressure)}"
-            android:textSize="24sp"
-            app:layout_constraintLeft_toRightOf="@+id/guidelineVertical"
-            app:layout_constraintTop_toBottomOf="@id/windSpeedText"
-            tools:text="1005" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/forecastRecyclerWeather"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:backroundColorSecondary="@{model.dt}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            android:layout_height="match_parent"
+            app:orientationListener="@{model.orientation}"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/rootBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:backroundColor="@{model.currentWeatherData.dt}"
+                tools:background="@color/eveningPrimary">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/updatedTimeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+
+                    app:dateTime="@{model.currentWeatherData.dt}"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/weatherStationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/weather_station(model.currentWeatherData.name)}"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/updatedTimeText" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageWeather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintHeight_percent="0.3"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/weatherStationText"
+                    app:mappedIcon="@{model.currentWeatherData.weather.get(0).icon}" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/weatherConditionText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/margin_default"
+                    android:text="@{@string/weather_condition(model.currentWeatherData.weather.get(0).description)}"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageWeather" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/tempWeather"
+                    android:text="@string/temperature"
+                    app:layout_constraintBottom_toTopOf="@+id/tempWeather"
+                    app:layout_constraintStart_toStartOf="@+id/tempWeather" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tempWeather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_default_three"
+                    android:textSize="40sp"
+                    app:layout_constraintBottom_toTopOf="@+id/feelsLikeWeather"
+                    app:layout_constraintRight_toLeftOf="@+id/guidelineVertical"
+                    app:layout_constraintTop_toBottomOf="@id/weatherConditionText"
+                    app:temperatureText="@{model.currentWeatherData.main.temp}"
+                    tools:text="25" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/feelsLikeWeather"
+                    android:text="@string/feels_like"
+                    app:layout_constraintBottom_toTopOf="@+id/feelsLikeWeather"
+                    app:layout_constraintStart_toStartOf="@+id/feelsLikeWeather" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/feelsLikeWeather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_default_three"
+                    android:textSize="40sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/guidelineVertical"
+                    app:layout_constraintTop_toBottomOf="@id/tempWeather"
+                    app:temperatureText="@{model.currentWeatherData.main.feelsLike}"
+                    tools:text="25" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineVertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.65" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/humidityText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_humidity"
+                    android:drawablePadding="@dimen/margin_default_half"
+                    android:text="@{String.valueOf(model.currentWeatherData.main.humidity) + '%'}"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toTopOf="@+id/windSpeedText"
+                    app:layout_constraintLeft_toRightOf="@+id/guidelineVertical"
+                    tools:text="25%" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/windSpeedText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@{@drawable/ic_wind_arrow}"
+                    android:drawablePadding="@dimen/margin_default_half"
+                    android:text="@{model.currentWeatherData.wind.speed}"
+                    android:textSize="24sp"
+                    app:degree="@{model.currentWeatherData.wind.deg}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/guidelineVertical"
+                    app:layout_constraintTop_toBottomOf="@id/weatherConditionText"
+                    tools:drawableStart="@drawable/ic_wind_arrow"
+                    tools:text="1.5 m/s" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/pressureText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_pressure"
+                    android:drawablePadding="@dimen/margin_default_half"
+                    android:text="@{String.valueOf(model.currentWeatherData.main.pressure)}"
+                    android:textSize="24sp"
+                    app:layout_constraintLeft_toRightOf="@+id/guidelineVertical"
+                    app:layout_constraintTop_toBottomOf="@id/windSpeedText"
+                    tools:text="1005" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/forecastRecyclerWeather"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:listitem="@layout/item_forecast_three_hours"
+                app:backroundColorSecondary="@{model.currentWeatherData.dt}"
+                app:itemLayout="@{@layout/item_forecast_three_hours}"
+                app:items="@{model.forecastWeatherData.list}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:onClick="@{null}"
+                app:orientationListener="@{model.orientation}"
+                tools:background="@color/colorPrimaryDark" />
+        </LinearLayout>
 
         <!--<ScrollView-->
         <!--    android:layout_width="match_parent"-->
@@ -279,5 +307,6 @@
         <!--        </LinearLayout>-->
         <!--</ScrollView>-->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

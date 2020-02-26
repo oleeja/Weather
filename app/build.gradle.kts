@@ -48,6 +48,7 @@ dependencies {
     implementation(Config.Android.material)
     implementation(Config.Android.constraintLayout)
     implementation(Config.Android.cardView)
+    implementation(Config.Android.swiperefreshlayout)
     implementation(Config.Android.navigation_fragment)
     implementation(Config.Android.navigation_ui)
 

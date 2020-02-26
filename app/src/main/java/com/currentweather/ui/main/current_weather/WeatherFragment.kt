@@ -10,27 +10,20 @@ import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.currentweather.R
 import com.currentweather.databinding.FragmentWeatherBinding
 import com.currentweather.domain.model.WeatherModel
-import com.currentweather.domain.model.forecast.ForecastThreeHours
-import com.currentweather.domain.model.forecast.ForecastThreeHoursModel
 import com.currentweather.ui.base.BaseFragment
 import com.currentweather.utils.getResourceBackgroundMain
 import com.currentweather.utils.getResourceBackgroundSecondary
-import com.github.nitrico.lastadapter.BR
-import com.github.nitrico.lastadapter.LastAdapter
-import kotlinx.android.synthetic.main.fragment_weather.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -50,7 +43,10 @@ class WeatherFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ) = FragmentWeatherBinding.inflate(inflater, container, false).also {
         lifecycle.addObserver(weatherViewModel)
-        subscribeUi(it)
+        it.lifecycleOwner = this
+        it.model = weatherViewModel
+        weatherViewModel.orientation = resources.configuration.orientation
+        subscribeUi()
     }.root
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -58,7 +54,7 @@ class WeatherFragment : BaseFragment() {
         setHasOptionsMenu(true)
     }
 
-    private fun subscribeUi(binding: FragmentWeatherBinding) {
+    private fun subscribeUi() {
         GlobalScope.launch(Dispatchers.Main) {
             val permissionResult =
                 permissions.requestPermissions(listOf(Manifest.permission.ACCESS_COARSE_LOCATION))
@@ -74,16 +70,8 @@ class WeatherFragment : BaseFragment() {
                 is WeatherViewModel.ViewState.Success -> {
                     when (result.data) {
                         is WeatherModel -> {
-                            binding.model = result.data
                             setBarColors(result.data.dt)
 
-                        }
-                        is ForecastThreeHoursModel -> {
-                            forecastRecyclerWeather.layoutManager =
-                                LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-                            LastAdapter(result.data.list, BR.model)
-                                .map<ForecastThreeHours>(R.layout.item_forecast_three_hours)
-                                .into(forecastRecyclerWeather)
                         }
                         is Location -> {
                             //TODO: move geocoding to datasource
@@ -98,7 +86,7 @@ class WeatherFragment : BaseFragment() {
                     }
                 }
                 is WeatherViewModel.ViewState.Error -> {
-                    Log.d("tttage", result.toString())
+                    Toast.makeText(context, result.throwable.message, Toast.LENGTH_SHORT).show()
                 }
             }
         })
