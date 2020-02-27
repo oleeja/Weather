@@ -51,6 +51,7 @@ dependencies {
     implementation(Config.Android.swiperefreshlayout)
     implementation(Config.Android.navigation_fragment)
     implementation(Config.Android.navigation_ui)
+    implementation(Config.Android.googleMap)
 
     implementation(Config.ThirdPartyLibs.koinCore)
     implementation(Config.ThirdPartyLibs.koinScope)

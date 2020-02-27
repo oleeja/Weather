@@ -22,4 +22,8 @@
         android:id="@+id/unitsFragment"
         android:name="com.currentweather.ui.main.units.UnitsFragment"
         android:label="UnitsFragment" />
+    <fragment
+        android:id="@+id/locationPickerFragment"
+        android:name="com.currentweather.ui.main.location_picker.LocationPickerFragment"
+        android:label="LocationPickerFragment" />
 </navigation>

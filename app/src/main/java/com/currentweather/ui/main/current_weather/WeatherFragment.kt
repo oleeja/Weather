@@ -22,8 +22,10 @@ import com.currentweather.R
 import com.currentweather.databinding.FragmentWeatherBinding
 import com.currentweather.domain.model.WeatherModel
 import com.currentweather.ui.base.BaseFragment
+import com.currentweather.ui.main.location_picker.LocationPickerFragment.Companion.PICK_LOCATION_KEY
 import com.currentweather.utils.getResourceBackgroundMain
 import com.currentweather.utils.getResourceBackgroundSecondary
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -47,7 +49,15 @@ class WeatherFragment : BaseFragment() {
         it.model = weatherViewModel
         weatherViewModel.orientation = resources.configuration.orientation
         subscribeUi()
+        subscribePickLocation()
     }.root
+
+    private fun subscribePickLocation() {
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<LatLng>(PICK_LOCATION_KEY)?.observe(
+            viewLifecycleOwner, Observer { result ->
+            weatherViewModel.changeLocation(result)
+        })
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -55,16 +65,6 @@ class WeatherFragment : BaseFragment() {
     }
 
     private fun subscribeUi() {
-        GlobalScope.launch(Dispatchers.Main) {
-            val permissionResult =
-                permissions.requestPermissions(listOf(Manifest.permission.ACCESS_COARSE_LOCATION))
-            if (permissionResult.isAllGranted) {
-                weatherViewModel.getData()
-            } else {
-                //TODO: add permissions denied handler
-            }
-        }
-
         weatherViewModel.getViewModelLiveData().observe(viewLifecycleOwner, Observer { result ->
             when (result) {
                 is WeatherViewModel.ViewState.Success -> {
@@ -78,7 +78,9 @@ class WeatherFragment : BaseFragment() {
                             val addresses: List<Address> =
                                 Geocoder(context, Locale.getDefault()).getFromLocation(result.data.latitude, result.data.longitude, 1)
                             if(addresses.isNotEmpty()){
-                                (activity as AppCompatActivity).supportActionBar?.title = addresses[0].locality
+                                (activity as AppCompatActivity).supportActionBar?.title = with(addresses[0]){
+                                    locality ?: adminArea ?: countryName?: "$latitude, $longitude"
+                                }
                             }
                         }
                         else -> {
@@ -90,6 +92,16 @@ class WeatherFragment : BaseFragment() {
                 }
             }
         })
+
+        GlobalScope.launch(Dispatchers.Main) {
+            val permissionResult =
+                permissions.requestPermissions(listOf(Manifest.permission.ACCESS_COARSE_LOCATION))
+            if (permissionResult.isAllGranted) {
+                weatherViewModel.getData()
+            } else {
+                //TODO: add permissions denied handler
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

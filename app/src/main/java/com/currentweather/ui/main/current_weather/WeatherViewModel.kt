@@ -7,9 +7,12 @@ import com.currentweather.CoroutineContextProvider
 import com.currentweather.domain.CurrentWeatherRepository
 import com.currentweather.domain.ForecastRepository
 import com.currentweather.domain.LocationRepository
+import com.currentweather.domain.UnitsRepository
+import com.currentweather.domain.model.Unit
 import com.currentweather.domain.model.WeatherModel
 import com.currentweather.domain.model.forecast.ForecastThreeHoursModel
 import com.currentweather.ui.base.BaseViewModel
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -18,7 +21,8 @@ class WeatherViewModel(
     val currentWeatherRepository: CurrentWeatherRepository,
     val forecastRepository: ForecastRepository,
     val coroutineContextProvider: CoroutineContextProvider,
-    val locationRepository: LocationRepository
+    val locationRepository: LocationRepository,
+    val unitsRepository: UnitsRepository
 ) : BaseViewModel(), LifecycleObserver {
 
     var isLoading = ObservableBoolean()
@@ -46,6 +50,10 @@ class WeatherViewModel(
         MutableLiveData<ForecastThreeHoursModel>()
     }
 
+    val currentUnits by lazy{
+        MutableLiveData<Unit>()
+    }
+
     fun getData() {
         viewModelScope.launch(handler) {
             val location = withContext(coroutineContextProvider.io()) {
@@ -56,6 +64,9 @@ class WeatherViewModel(
             }
             forecastWeatherData.value = withContext(coroutineContextProvider.io()) {
                 forecastRepository.getForecast(location)
+            }
+            currentUnits.value = withContext(coroutineContextProvider.io()) {
+                unitsRepository.getAppUnits()
             }
             data.value =
                 ViewState.Success(
@@ -74,6 +85,17 @@ class WeatherViewModel(
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun stopData() {
         // TODO: add unsubscribeLocation
+    }
+
+    fun changeLocation(latLng: LatLng?) {
+        latLng?.let {
+            viewModelScope.launch(handler) {
+                withContext(coroutineContextProvider.io()) {
+                    locationRepository.saveAppLocation(it)
+                    onRefresh()
+                }
+            }
+        }
     }
 
     sealed class ViewState {

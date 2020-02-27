@@ -1,4 +1,3 @@
-import Config.Versions.lastAdapterVersion
 
 private const val kotlinVersion = "1.3.61"
 private const val androidGradleVersion = "3.5.3"
@@ -12,7 +11,7 @@ private const val picassoVersion = "2.5.2"
 private const val mockitoVersion = "2.13.0"
 
 //Navigation
-private const val nav_version = "2.2.0"
+private const val nav_version = "2.3.0-alpha02"
 
 object Config {
 
@@ -32,6 +31,7 @@ object Config {
         const val broadcastManagerVersion = "1.0.0"
         const val fragmentVersion = "1.2.0"
         const val lifecycleVersion = "2.2.0"
+        const val googleMapVersion = "17.0.0"
 
         // Third-party libs
         const val koinVersion = "2.0.1"
@@ -81,6 +81,7 @@ object Config {
         const val lifecycleViewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}"
         val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:$nav_version"
         val navigation_ui = "androidx.navigation:navigation-ui-ktx:$nav_version"
+        val googleMap = "com.google.android.gms:play-services-maps:${Versions.googleMapVersion}"
     }
 
     object ThirdPartyLibs {
@@ -96,7 +97,7 @@ object Config {
         val retrofit = "com.squareup.retrofit2:retrofit:$retrofitVersion"
         val retrofit_gson = "com.squareup.retrofit2:converter-gson:$retrofitVersion"
         val picasso = "com.squareup.picasso:picasso:$picassoVersion"
-        val lastAdapter = "com.github.nitrico.lastadapter:lastadapter:$lastAdapterVersion"
+        val lastAdapter = "com.github.nitrico.lastadapter:lastadapter:${Versions.lastAdapterVersion}"
     }
 
     object TestingLibs {

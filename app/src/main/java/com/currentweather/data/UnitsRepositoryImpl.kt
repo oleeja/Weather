@@ -14,4 +14,6 @@ class UnitsRepositoryImpl(private val unitsDataSource: UnitsDataSource) : UnitsR
     override suspend fun setAppUnits(unit: Unit) {
         unitsDataSource.saveAppUnit(unit)
     }
+
+    override suspend fun getAppUnits() = unitsDataSource.getAppUnit()
 }

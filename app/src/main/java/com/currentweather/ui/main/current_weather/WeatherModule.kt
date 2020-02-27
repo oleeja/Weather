@@ -10,11 +10,11 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val weatherViewModule = module{
-    viewModel { WeatherViewModel(get(), get(), get(), get()) }
+    viewModel { WeatherViewModel(get(), get(), get(), get(), get()) }
 }
 
 val weatherRepositoryModule = module {
     single<CurrentWeatherRepository> { CurrentWeatherRepositoryImpl(get()) }
     single<ForecastRepository> { ForecastThreeHoursRepositoryImpl(get()) }
-    single<LocationRepository> { LocationRepositoryImpl(get(), get()) }
+    single<LocationRepository> { LocationRepositoryImpl(get(), get(), get()) }
 }

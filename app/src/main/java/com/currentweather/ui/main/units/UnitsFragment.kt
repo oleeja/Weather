@@ -18,5 +18,4 @@ class UnitsFragment : BaseFragment() {
         lifecycle.addObserver(unitsViewModel)
         it.model = unitsViewModel
     }.root
-
 }
