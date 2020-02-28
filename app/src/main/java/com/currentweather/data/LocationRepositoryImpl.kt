@@ -13,7 +13,8 @@ class LocationRepositoryImpl (private val lastKnownLocationDataSource: LastKnown
     override suspend fun getAppLocation() : Location {
         return try {
             appLocationDataSource.getLocation() ?: lastKnownLocationDataSource.getLastKnownLocation()
-        } catch (e: Exception){
+        }catch (e: Exception){
+            if(e is SecurityException) throw e
             updateLocationDataSource.getUpdatedLocation()
         }
     }

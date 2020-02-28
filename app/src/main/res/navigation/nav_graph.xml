@@ -25,5 +25,10 @@
     <fragment
         android:id="@+id/locationPickerFragment"
         android:name="com.currentweather.ui.main.location_picker.LocationPickerFragment"
-        android:label="LocationPickerFragment" />
+        android:label="LocationPickerFragment" >
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://pick.location/google"
+            android:autoVerify="true" />
+    </fragment>
 </navigation>

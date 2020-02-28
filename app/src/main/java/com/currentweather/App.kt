@@ -4,6 +4,7 @@ import android.app.Application
 import com.currentweather.ui.di.commonModule
 import com.currentweather.ui.di.dataSourceModule
 import com.currentweather.ui.di.retrofitNetworkModule
+import com.currentweather.ui.launch.loading.loadingViewModule
 import com.currentweather.ui.main.current_weather.weatherRepositoryModule
 import com.currentweather.ui.main.current_weather.weatherViewModule
 import com.currentweather.ui.main.location_picker.locationPickerViewModule
@@ -24,7 +25,7 @@ class App : Application() {
             modules(
                 weatherViewModule + weatherRepositoryModule
                         + settingsViewModule + unitsViewModule + unitsRepositoryModule
-                        + locationPickerViewModule
+                        + locationPickerViewModule + loadingViewModule
             )
         }
     }

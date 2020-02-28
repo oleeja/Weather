@@ -1,6 +1,5 @@
 package com.currentweather.ui.main.current_weather
 
-import android.Manifest
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Address
@@ -26,9 +25,6 @@ import com.currentweather.ui.main.location_picker.LocationPickerFragment.Compani
 import com.currentweather.utils.getResourceBackgroundMain
 import com.currentweather.utils.getResourceBackgroundSecondary
 import com.google.android.gms.maps.model.LatLng
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -92,16 +88,6 @@ class WeatherFragment : BaseFragment() {
                 }
             }
         })
-
-        GlobalScope.launch(Dispatchers.Main) {
-            val permissionResult =
-                permissions.requestPermissions(listOf(Manifest.permission.ACCESS_COARSE_LOCATION))
-            if (permissionResult.isAllGranted) {
-                weatherViewModel.getData()
-            } else {
-                //TODO: add permissions denied handler
-            }
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

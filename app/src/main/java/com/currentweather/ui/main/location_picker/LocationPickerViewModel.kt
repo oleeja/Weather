@@ -1,6 +1,7 @@
 package com.currentweather.ui.main.location_picker
 
 import android.location.Location
+import android.util.Log
 import androidx.lifecycle.*
 import com.currentweather.CoroutineContextProvider
 import com.currentweather.domain.LocationRepository
@@ -37,6 +38,6 @@ class LocationPickerViewModel(val coroutineContextProvider: CoroutineContextProv
     }
 
     override fun handleException(exception: Throwable) {
-        //TODO("not implemented")
+       Log.d("", "")
     }
 }

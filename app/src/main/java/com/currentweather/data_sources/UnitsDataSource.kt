@@ -14,9 +14,9 @@ class UnitsDataSource(context: Context) {
     private val APP_UNIT = "APP_UNIT"
 
     private val unitList = arrayListOf(
-        Unit("Standard", "", "Kelvin", "meter/sec", "hPa"),
-        Unit("Metric", "metric", "Celsius", "meter/sec", "hPa"),
-        Unit("Imperial", "imperial", "Fahrenheit", "meter/sec", "hPa")
+        Unit("Standard", "", "Kelvin", "met/s", "hPa"),
+        Unit("Metric", "metric", "Celsius", "met/s", "hPa"),
+        Unit("Imperial", "imperial", "Fahrenheit", "mil/h", "hPa")
     )
 
     fun getUnits() = unitList
