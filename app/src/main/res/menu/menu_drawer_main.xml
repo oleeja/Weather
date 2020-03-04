@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@id/notificationSettingsFragment"
+        android:title="Ongoing Notification" />
+
+    <item
+        android:enabled="false"
+        android:title="Widgets - soon" />
+</menu>

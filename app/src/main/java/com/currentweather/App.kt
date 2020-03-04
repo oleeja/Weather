@@ -1,13 +1,13 @@
 package com.currentweather
 
 import android.app.Application
-import com.currentweather.ui.di.commonModule
-import com.currentweather.ui.di.dataSourceModule
-import com.currentweather.ui.di.retrofitNetworkModule
+import com.currentweather.ui.di.*
 import com.currentweather.ui.launch.loading.loadingViewModule
 import com.currentweather.ui.main.current_weather.weatherRepositoryModule
 import com.currentweather.ui.main.current_weather.weatherViewModule
 import com.currentweather.ui.main.location_picker.locationPickerViewModule
+import com.currentweather.ui.main.notification.notificationRepositoryModule
+import com.currentweather.ui.main.notification.notificationSettingsViewModule
 import com.currentweather.ui.main.settings.settingsViewModule
 import com.currentweather.ui.main.units.unitsRepositoryModule
 import com.currentweather.ui.main.units.unitsViewModule
@@ -21,11 +21,12 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(commonModule + dataSourceModule + retrofitNetworkModule)
+            modules(commonModule + dataSourceModule + retrofitNetworkModule + utilsModule + onGoingNotificationModule)
             modules(
                 weatherViewModule + weatherRepositoryModule
                         + settingsViewModule + unitsViewModule + unitsRepositoryModule
-                        + locationPickerViewModule + loadingViewModule
+                        + locationPickerViewModule + loadingViewModule + notificationSettingsViewModule
+                        + notificationRepositoryModule
             )
         }
     }

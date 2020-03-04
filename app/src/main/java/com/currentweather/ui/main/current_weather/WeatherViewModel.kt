@@ -12,17 +12,16 @@ import com.currentweather.domain.model.Unit
 import com.currentweather.domain.model.WeatherModel
 import com.currentweather.domain.model.forecast.ForecastThreeHoursModel
 import com.currentweather.ui.base.BaseViewModel
-import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
 class WeatherViewModel(
-    val currentWeatherRepository: CurrentWeatherRepository,
-    val forecastRepository: ForecastRepository,
-    val coroutineContextProvider: CoroutineContextProvider,
-    val locationRepository: LocationRepository,
-    val unitsRepository: UnitsRepository
+    private val currentWeatherRepository: CurrentWeatherRepository,
+    private val forecastRepository: ForecastRepository,
+    private val coroutineContextProvider: CoroutineContextProvider,
+    private val locationRepository: LocationRepository,
+    private val unitsRepository: UnitsRepository
 ) : BaseViewModel(), LifecycleObserver {
 
     var isLoading = ObservableBoolean()
@@ -54,6 +53,7 @@ class WeatherViewModel(
         MutableLiveData<Unit>()
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun getData() {
         viewModelScope.launch(handler) {
             val location = withContext(coroutineContextProvider.io()) {
@@ -82,20 +82,9 @@ class WeatherViewModel(
         isLoading.set(false)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun stopData() {
         // TODO: add unsubscribeLocation
-    }
-
-    fun changeLocation(latLng: LatLng?) {
-        latLng?.let {
-            viewModelScope.launch(handler) {
-                withContext(coroutineContextProvider.io()) {
-                    locationRepository.saveAppLocation(it)
-                    onRefresh()
-                }
-            }
-        }
     }
 
     sealed class ViewState {

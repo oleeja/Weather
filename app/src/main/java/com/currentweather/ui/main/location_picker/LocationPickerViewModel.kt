@@ -10,8 +10,8 @@ import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LocationPickerViewModel(val coroutineContextProvider: CoroutineContextProvider,
-                              val locationRepository: LocationRepository
+class LocationPickerViewModel(private val coroutineContextProvider: CoroutineContextProvider,
+                              private val locationRepository: LocationRepository
 ) : BaseViewModel(), LifecycleObserver {
 
     private var location: LatLng? = null
@@ -38,6 +38,17 @@ class LocationPickerViewModel(val coroutineContextProvider: CoroutineContextProv
     }
 
     override fun handleException(exception: Throwable) {
+        //TODO: handle exeption
        Log.d("", "")
+    }
+
+    fun changeLocation(latLng: LatLng?) {
+        latLng?.let {
+            viewModelScope.launch(handler) {
+                withContext(coroutineContextProvider.io()) {
+                    locationRepository.saveAppLocation(it)
+                }
+            }
+        }
     }
 }

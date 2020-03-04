@@ -14,7 +14,7 @@ class LastKnownLocationDataSource(private val fusedLocationClient: FusedLocation
                     it.resumeWithException(exception)
                 }
                 .addOnSuccessListener { location : Location? ->
-                    it.resume(location ?: throw Exception())
+                    if(location != null) it.resume(location) else it.resumeWithException(Exception())
                 }
         }
     }

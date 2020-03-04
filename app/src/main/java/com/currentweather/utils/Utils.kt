@@ -8,6 +8,8 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.format.DateFormat
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -31,6 +33,9 @@ import java.util.*
 
 @BindingConversion
 fun convertNumberToString(i: Number?) = i?.toString() ?: "--"
+
+@BindingConversion
+fun convertBooleanToVisibility(visible: Boolean?) = if(visible == null || visible) VISIBLE else GONE
 
 @BindingAdapter("app:backroundColor")
 fun convertTimeStampToColor(view: View, timestamp: Long?) {

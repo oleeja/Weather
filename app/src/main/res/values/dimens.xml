@@ -11,4 +11,6 @@
     <dimen name="margin_default_double">32dp</dimen>
     <dimen name="margin_default_three">48dp</dimen>
     <dimen name="margin_default_four">64dp</dimen>
+
+    <dimen name="sb_temp_icon_size">14dp</dimen>
 </resources>

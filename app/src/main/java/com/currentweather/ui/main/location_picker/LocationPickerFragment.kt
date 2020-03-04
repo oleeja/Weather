@@ -8,7 +8,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.currentweather.databinding.FragmentLocationPickerBinding
 import com.currentweather.ui.views.AbstractMapView
 import com.google.android.gms.maps.model.LatLng
@@ -100,7 +99,7 @@ class LocationPickerFragment : Fragment() {
 
     private fun setPickupResult (){
         locationPickerViewModel.getLocation().let {
-            findNavController().previousBackStackEntry?.savedStateHandle?.set(PICK_LOCATION_KEY, it)
+            locationPickerViewModel.changeLocation(it)
         }
     }
 

@@ -31,4 +31,8 @@
             app:uri="https://pick.location/google"
             android:autoVerify="true" />
     </fragment>
+    <fragment
+        android:id="@+id/notificationSettingsFragment"
+        android:name="com.currentweather.ui.main.notification.NotificationSettingsFragment"
+        android:label="NotificationSettingsFragment" />
 </navigation>

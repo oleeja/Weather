@@ -18,7 +18,7 @@ object Config {
     private object Versions {
         // Tools
         const val kotlinVersion = "1.3.61"
-        const val androidGradleVersion = "3.5.3"
+        const val androidGradleVersion = "3.6.0"
         const val ktxCoreVersion = "1.1.0"
         const val playServicesVersion = "17.0.0"
 
@@ -32,6 +32,7 @@ object Config {
         const val fragmentVersion = "1.2.0"
         const val lifecycleVersion = "2.2.0"
         const val googleMapVersion = "17.0.0"
+        const val workVersion = "2.3.2"
 
         // Third-party libs
         const val koinVersion = "2.0.1"
@@ -82,6 +83,7 @@ object Config {
         val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:$nav_version"
         val navigation_ui = "androidx.navigation:navigation-ui-ktx:$nav_version"
         val googleMap = "com.google.android.gms:play-services-maps:${Versions.googleMapVersion}"
+        val workManager = "androidx.work:work-runtime-ktx:${Versions.workVersion}"
     }
 
     object ThirdPartyLibs {

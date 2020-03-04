@@ -6,4 +6,28 @@
     <string name="weather_condition">Weather condition: %1$s</string>
     <string name="feels_like">Feels like:</string>
     <string name="temperature">Temperature:</string>
+
+    <string name="default_ongoing_channel_id" translatable="false">ongoing_channel</string>
+    <string name="default_ongoing_channel_name" translatable="true">Today\'s Weather</string>
+
+    <string name="ri_30minutes">30 minutes</string>
+    <string name="ri_1hour">1 hour</string>
+    <string name="ri_2hours">2 hours</string>
+    <string name="ri_4hours">4 hours</string>
+    <string name="ri_once_daily">Once daily</string>
+
+    <string name="sb_settings_refresh_interval">Refresh interval</string>
+    <string name="sb_settings_refresh_interval_default">1 hour</string>
+    <string name="sb_settings_refresh_interval_30m">30 minutes</string>
+    <string name="sb_settings_refresh_interval_2h">2 hours</string>
+    <string name="sb_settings_refresh_interval_4h">4 hours</string>
+    <string name="sb_settings_refresh_interval_daily">Once daily</string>
+
+    <string-array name="sb_refresh_interval_default_list">
+        <item>@string/sb_settings_refresh_interval_30m</item>
+        <item>@string/sb_settings_refresh_interval_default</item>
+        <item>@string/sb_settings_refresh_interval_2h</item>
+        <item>@string/sb_settings_refresh_interval_4h</item>
+        <item>@string/sb_settings_refresh_interval_daily</item>
+    </string-array>
 </resources>

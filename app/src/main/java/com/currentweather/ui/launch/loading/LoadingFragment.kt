@@ -1,6 +1,7 @@
 package com.currentweather.ui.launch.loading
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,14 +13,18 @@ import androidx.navigation.fragment.findNavController
 import com.currentweather.R
 import com.currentweather.databinding.FragmentLoadingBinding
 import com.currentweather.ui.base.BaseFragment
+import com.currentweather.utils.GpsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+
 class LoadingFragment : BaseFragment() {
 
     private val loadingViewModel: LoadingViewModel by viewModel()
+
+    private val gpsUtils: GpsUtils by lazy { GpsUtils(context) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,6 +32,17 @@ class LoadingFragment : BaseFragment() {
     ) = FragmentLoadingBinding.inflate(inflater, container, false).also {
         subscribeUI()
     }.root
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == GpsUtils.GPS_REQUEST) {
+                loadingViewModel.loadLocation()
+            }
+        } else {
+            startMapScreen()
+        }
+    }
 
     private fun subscribeUI() {
         loadingViewModel.loading.observe(viewLifecycleOwner, Observer { result ->
@@ -46,13 +62,19 @@ class LoadingFragment : BaseFragment() {
             val permissionResult =
                 permissions.requestPermissions(listOf(Manifest.permission.ACCESS_COARSE_LOCATION))
             if (permissionResult.isAllGranted) {
-                loadingViewModel.loadLocation()
+                gpsUtils.turnGPSOn {
+                    if (it) loadingViewModel.loadLocation()
+                    else startMapScreen()
+                }
             } else {
-                startActivity(Intent (Intent.ACTION_VIEW).apply {
-                    data = Uri.parse("https://pick.location/google")
-                })
+                startMapScreen()
             }
         }
     }
 
+    private fun startMapScreen() {
+        startActivity(Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("https://pick.location/google")
+        })
+    }
 }

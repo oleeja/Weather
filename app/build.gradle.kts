@@ -37,6 +37,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 dependencies {
@@ -52,6 +56,7 @@ dependencies {
     implementation(Config.Android.navigation_fragment)
     implementation(Config.Android.navigation_ui)
     implementation(Config.Android.googleMap)
+    implementation(Config.Android.workManager)
 
     implementation(Config.ThirdPartyLibs.koinCore)
     implementation(Config.ThirdPartyLibs.koinScope)

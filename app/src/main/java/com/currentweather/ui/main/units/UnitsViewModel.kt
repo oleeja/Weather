@@ -61,5 +61,4 @@ class UnitsViewModel(
     override fun handleException(exception: Throwable) {
         //TODO("not implemented")
     }
-
 }

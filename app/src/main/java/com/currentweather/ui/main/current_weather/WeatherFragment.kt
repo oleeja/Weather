@@ -2,8 +2,6 @@ package com.currentweather.ui.main.current_weather
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -21,12 +19,10 @@ import com.currentweather.R
 import com.currentweather.databinding.FragmentWeatherBinding
 import com.currentweather.domain.model.WeatherModel
 import com.currentweather.ui.base.BaseFragment
-import com.currentweather.ui.main.location_picker.LocationPickerFragment.Companion.PICK_LOCATION_KEY
+import com.currentweather.utils.getDisplayingName
 import com.currentweather.utils.getResourceBackgroundMain
 import com.currentweather.utils.getResourceBackgroundSecondary
-import com.google.android.gms.maps.model.LatLng
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 
 
 class WeatherFragment : BaseFragment() {
@@ -45,15 +41,7 @@ class WeatherFragment : BaseFragment() {
         it.model = weatherViewModel
         weatherViewModel.orientation = resources.configuration.orientation
         subscribeUi()
-        subscribePickLocation()
     }.root
-
-    private fun subscribePickLocation() {
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<LatLng>(PICK_LOCATION_KEY)?.observe(
-            viewLifecycleOwner, Observer { result ->
-            weatherViewModel.changeLocation(result)
-        })
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -67,16 +55,10 @@ class WeatherFragment : BaseFragment() {
                     when (result.data) {
                         is WeatherModel -> {
                             setBarColors(result.data.dt)
-
                         }
                         is Location -> {
-                            //TODO: move geocoding to datasource
-                            val addresses: List<Address> =
-                                Geocoder(context, Locale.getDefault()).getFromLocation(result.data.latitude, result.data.longitude, 1)
-                            if(addresses.isNotEmpty()){
-                                (activity as AppCompatActivity).supportActionBar?.title = with(addresses[0]){
-                                    locality ?: adminArea ?: countryName?: "$latitude, $longitude"
-                                }
+                            context?.let {
+                                (activity as AppCompatActivity).supportActionBar?.title = result.data.getDisplayingName(it)
                             }
                         }
                         else -> {
@@ -113,7 +95,9 @@ class WeatherFragment : BaseFragment() {
             (activity as AppCompatActivity).supportActionBar?.apply {
                 setBackgroundDrawable(
                     ColorDrawable(
-                        ContextCompat.getColor(it, getResourceBackgroundMain(timestamp).also { menuItemColor = it })
+                        ContextCompat.getColor(
+                            it,
+                            getResourceBackgroundMain(timestamp).also { menuItemColor = it })
                     )
                 )
                 invalidateOptionsMenu()
