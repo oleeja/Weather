@@ -31,7 +31,7 @@ class LocationPickerViewModel(private val coroutineContextProvider: CoroutineCon
     fun loadAppLocation() {
         viewModelScope.launch(handler) {
             val location = withContext(coroutineContextProvider.io()) {
-                locationRepository.getAppLocation()
+                locationRepository.getLocation()
             }
             currentWeatherData.value = location
         }
@@ -46,7 +46,7 @@ class LocationPickerViewModel(private val coroutineContextProvider: CoroutineCon
         latLng?.let {
             viewModelScope.launch(handler) {
                 withContext(coroutineContextProvider.io()) {
-                    locationRepository.saveAppLocation(it)
+                    locationRepository.saveLocation(it)
                 }
             }
         }

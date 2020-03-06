@@ -28,7 +28,7 @@
         android:label="LocationPickerFragment" >
         <deepLink
             android:id="@+id/deepLink"
-            app:uri="https://pick.location/google"
+            app:uri="bestWeather://pick.location/google"
             android:autoVerify="true" />
     </fragment>
     <fragment

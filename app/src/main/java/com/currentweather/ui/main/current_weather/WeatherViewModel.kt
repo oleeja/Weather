@@ -57,7 +57,7 @@ class WeatherViewModel(
     fun getData() {
         viewModelScope.launch(handler) {
             val location = withContext(coroutineContextProvider.io()) {
-                locationRepository.getAppLocation()
+                locationRepository.getLocation()
             }
             currentWeatherData.value = withContext(coroutineContextProvider.io()) {
                 currentWeatherRepository.getWeatherData(location)

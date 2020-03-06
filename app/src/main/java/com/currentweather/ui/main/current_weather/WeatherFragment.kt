@@ -22,12 +22,13 @@ import com.currentweather.ui.base.BaseFragment
 import com.currentweather.utils.getDisplayingName
 import com.currentweather.utils.getResourceBackgroundMain
 import com.currentweather.utils.getResourceBackgroundSecondary
+import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class WeatherFragment : BaseFragment() {
 
-    private val weatherViewModel: WeatherViewModel by viewModel()
+    private val weatherViewModel: WeatherViewModel by currentScope.viewModel(this)
 
     private var menuItemColor = Color.BLACK
 

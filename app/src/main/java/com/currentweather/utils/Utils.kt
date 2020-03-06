@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.location.Location
 import android.os.Build
 import android.text.format.DateFormat
 import android.view.View
@@ -36,6 +37,12 @@ fun convertNumberToString(i: Number?) = i?.toString() ?: "--"
 
 @BindingConversion
 fun convertBooleanToVisibility(visible: Boolean?) = if(visible == null || visible) VISIBLE else GONE
+
+@BindingAdapter("android:text")
+fun getLocationName(textView: AppCompatTextView, location: Location?) {
+    if(location == null) textView.context.resources.getString(R.string.sb_settings_location)
+    else textView.setText(location.getDisplayingName(textView.context))
+}
 
 @BindingAdapter("app:backroundColor")
 fun convertTimeStampToColor(view: View, timestamp: Long?) {

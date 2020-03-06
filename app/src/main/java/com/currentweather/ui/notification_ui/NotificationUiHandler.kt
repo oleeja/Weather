@@ -27,12 +27,11 @@ class NotificationUiHandler(
 
     private val ONGOING_NOTIFICATION_ID = 101
 
-    private lateinit var icon: Icon
     private var updateTime: Long = 0
 
     override suspend fun showNotification() {
         //TODO Change to notification location
-        val appLocation = locationRepository.getAppLocation()
+        val appLocation = locationRepository.getLocation()
         val weatherModel = currentWeatherRepository.getWeatherData(appLocation)
         showNotificationData(
             weatherModel.toOntoOnGoingNotificationModel(appLocation),
@@ -53,10 +52,9 @@ class NotificationUiHandler(
         title: String
     ) {
         onGoingNotificationDataModel.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                icon =
+            val icon = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     Icon.createWithBitmap(statusBarIconUtils.getTemperatureBitmap(it.temperature))
-            }
+            } else null
 
             updateTime = onGoingNotificationDataModel.updatedTime ?: System.currentTimeMillis()
 
@@ -65,7 +63,7 @@ class NotificationUiHandler(
                 drawableUtils.getBitmapFromVectorDrawable(
                     getLocalIconFromIconCode(
                         onGoingNotificationDataModel.iconCode
-                    )
+                    ), 24f, 24f
                 )
                     ?: BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher),
                 title,

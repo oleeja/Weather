@@ -21,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="@={model.notificationEnabled}"
+            tools:checked="true"
             android:text="Ongoing Notification"/>
 
         <com.currentweather.ui.views.SubtitledTextView
@@ -32,6 +33,30 @@
             android:text="@string/sb_settings_refresh_interval"
             android:entries="@array/sb_refresh_interval_default_list"
             app:defaultItem="0" />
+
+        <LinearLayout
+            android:id="@+id/locationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> model.openLocation()}"
+            android:visibility="@{ongoingSwitch.checked}"
+            android:padding="16dp"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="Location"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:text="@{model.notificationLocation}"
+                tools:text="@string/sb_settings_location"
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
     </LinearLayout>
 </layout>

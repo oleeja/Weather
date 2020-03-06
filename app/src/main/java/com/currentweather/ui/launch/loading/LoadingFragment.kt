@@ -17,12 +17,13 @@ import com.currentweather.utils.GpsUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class LoadingFragment : BaseFragment() {
 
-    private val loadingViewModel: LoadingViewModel by viewModel()
+    private val loadingViewModel: LoadingViewModel by currentScope.viewModel(this)
 
     private val gpsUtils: GpsUtils by lazy { GpsUtils(context) }
 
@@ -74,7 +75,7 @@ class LoadingFragment : BaseFragment() {
 
     private fun startMapScreen() {
         startActivity(Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("https://pick.location/google")
+            data = Uri.parse("bestWeather://pick.location/google")
         })
     }
 }

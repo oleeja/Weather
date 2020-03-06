@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.LatLng
 class LocationRepositoryImpl (private val lastKnownLocationDataSource: LastKnownLocationDataSource,
                               private val updateLocationDataSource: UpdateLocationDataSource,
                               private val appLocationDataSource: AppLocationDataSource) : LocationRepository {
-    override suspend fun getAppLocation() : Location {
+    override suspend fun getLocation() : Location {
         return try {
             appLocationDataSource.getLocation() ?: lastKnownLocationDataSource.getLastKnownLocation()
         }catch (e: Exception){
@@ -19,7 +19,7 @@ class LocationRepositoryImpl (private val lastKnownLocationDataSource: LastKnown
         }
     }
 
-    override suspend fun saveAppLocation(latLng: LatLng){
+    override suspend fun saveLocation(latLng: LatLng){
         appLocationDataSource.saveLocation(latLng)
     }
 }

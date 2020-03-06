@@ -21,7 +21,7 @@ class LoadingViewModel(private val coroutineContextProvider: CoroutineContextPro
     fun loadLocation() {
         viewModelScope.launch(handler) {
             val location = withContext(coroutineContextProvider.io()) {
-                locationRepository.getAppLocation()
+                locationRepository.getLocation()
             }
             loading.value = LoadingState.LOADED(location)
         }

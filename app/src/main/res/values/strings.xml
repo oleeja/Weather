@@ -23,6 +23,8 @@
     <string name="sb_settings_refresh_interval_4h">4 hours</string>
     <string name="sb_settings_refresh_interval_daily">Once daily</string>
 
+    <string name="sb_settings_location">Current location</string>
+
     <string-array name="sb_refresh_interval_default_list">
         <item>@string/sb_settings_refresh_interval_30m</item>
         <item>@string/sb_settings_refresh_interval_default</item>

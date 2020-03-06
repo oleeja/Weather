@@ -9,11 +9,12 @@ import androidx.navigation.fragment.findNavController
 import com.currentweather.R
 import com.currentweather.databinding.FragmentSettingsBinding
 import com.currentweather.ui.base.BaseFragment
+import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : BaseFragment() {
 
-    private val settingsViewModel: SettingsViewModel by viewModel()
+    private val settingsViewModel: SettingsViewModel by currentScope.viewModel(this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

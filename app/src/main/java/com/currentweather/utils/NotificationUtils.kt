@@ -15,7 +15,7 @@ import com.currentweather.ui.launch.LaunchActivity
 
 class NotificationUtils(val context: Context) {
     @Suppress("DEPRECATION")
-    fun createCustomNotification(smallIcon: Icon, bigIcon: Bitmap, title: String, subtitle: String, notificationId: Int, locationInfo: Location) {
+    fun createCustomNotification(smallIcon: Icon?, bigIcon: Bitmap, title: String, subtitle: String, notificationId: Int, locationInfo: Location) {
         val channelId = context.getString(R.string.default_ongoing_channel_id)
         val notification =
             (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) Notification.Builder(
@@ -33,7 +33,7 @@ class NotificationUtils(val context: Context) {
                     )
                 )
                 .apply {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && smallIcon != null) {
                         setSmallIcon(smallIcon)
                     } else {
                         setSmallIcon(R.mipmap.ic_launcher)

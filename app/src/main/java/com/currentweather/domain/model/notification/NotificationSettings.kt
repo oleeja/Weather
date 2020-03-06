@@ -1,16 +1,21 @@
 package com.currentweather.domain.model.notification
 
 import android.content.Context
+import android.location.Location
+import com.google.gson.Gson
 
 /**
  * Status bar notification view settings implementation.
  *
  * @author Oleh Nahornyi
  */
-class NotificationSettings(context: Context){
+class NotificationSettings(val context: Context) {
 
     val prefs =
-        context.getSharedPreferences(PREF_ONGOING_NOTIFICATION_SETTINGS_FILENAME, Context.MODE_PRIVATE)
+        context.getSharedPreferences(
+            PREF_ONGOING_NOTIFICATION_SETTINGS_FILENAME,
+            Context.MODE_PRIVATE
+        )
 
 
     var isStatusBarNotificationEnable: Boolean
@@ -24,7 +29,10 @@ class NotificationSettings(context: Context){
          * @param isNotificationEnable true if enabled
          * @see .isStatusBarNotificationEnable
          */
-        set(isNotificationEnable) = prefs.edit().putBoolean(NOTIFICATION_ENABLE_PREF_KEY, isNotificationEnable).apply()
+        set(isNotificationEnable) = prefs.edit().putBoolean(
+            NOTIFICATION_ENABLE_PREF_KEY,
+            isNotificationEnable
+        ).apply()
 
     var notificationRefreshInterval: NotificationRefreshInterval
         /**
@@ -37,7 +45,24 @@ class NotificationSettings(context: Context){
          * @param refreshInterval refresh interval to set
          * @see .getNavigationType
          */
-        set(refreshInterval) = prefs.edit().putInt(REFRESH_INTERVAL_PREF_KEY, refreshInterval.id).apply()
+        set(refreshInterval) = prefs.edit().putInt(
+            REFRESH_INTERVAL_PREF_KEY,
+            refreshInterval.id
+        ).apply()
+
+
+    var notificationLocation: Location?
+        /**
+         * @return notification location
+         */
+        get() = Gson().fromJson(prefs.getString(LOCATION_PREF_KEY, ""), Location::class.java)
+
+        /**
+         * Alters current location settings.
+         *
+         * @param location location to set
+         */
+        set(location) = prefs.edit().putString(LOCATION_PREF_KEY, Gson().toJson(location)).apply()
 
 
     companion object {
@@ -45,5 +70,6 @@ class NotificationSettings(context: Context){
 
         private const val NOTIFICATION_ENABLE_PREF_KEY = "enable_notifications"
         private const val REFRESH_INTERVAL_PREF_KEY = "refresh_interval"
+        private const val LOCATION_PREF_KEY = "location"
     }
 }

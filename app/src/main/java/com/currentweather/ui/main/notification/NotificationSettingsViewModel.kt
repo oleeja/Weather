@@ -1,5 +1,6 @@
 package com.currentweather.ui.main.notification
 
+import android.location.Location
 import androidx.databinding.Bindable
 import androidx.lifecycle.*
 import com.currentweather.BR
@@ -32,8 +33,9 @@ class NotificationSettingsViewModel(
     fun getData() {
         viewModelScope.launch(handler) {
             val location = withContext(coroutineContextProvider.io()) {
-                locationRepository.getAppLocation()
+                locationRepository.getLocation()
             }
+            setNotificationLocation(location)
         }
     }
 
@@ -46,6 +48,18 @@ class NotificationSettingsViewModel(
     fun setNotificationEnabled(enabled: Boolean){
         this.settings.value?.isStatusBarNotificationEnable = enabled
         notifyPropertyChanged(BR.notificationEnabled)
+    }
+
+    @Bindable
+    fun getNotificationLocation() = notificationSettings.notificationLocation
+
+    fun setNotificationLocation(location: Location){
+        this.settings.value?.notificationLocation = location
+        notifyPropertyChanged(BR.notificationLocation)
+    }
+
+    fun openLocation(){
+
     }
 
     fun saveSettings() {
