@@ -34,5 +34,9 @@
     <fragment
         android:id="@+id/notificationSettingsFragment"
         android:name="com.currentweather.ui.main.notification.NotificationSettingsFragment"
-        android:label="NotificationSettingsFragment" />
+        android:label="NotificationSettingsFragment" >
+        <action
+            android:id="@+id/action_notificationSettingsFragment_to_locationPickerFragment"
+            app:destination="@id/locationPickerFragment" />
+    </fragment>
 </navigation>

@@ -27,7 +27,9 @@ val locationPickerRepositoryModule = module {
                     get()
                 )
                 LocationPickerFragment.LocationType.ONGOING_NOTIFICATION_LOCATION -> OnGoingLocationRepositoryImpl(
-
+                    get(),
+                    get(),
+                    get()
                 )
                 LocationPickerFragment.LocationType.WIDGET_LOCATION -> LocationRepositoryImpl(
                     get(),

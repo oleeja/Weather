@@ -5,6 +5,10 @@
 
     <data >
         <variable
+            name="navDirection"
+            type="androidx.navigation.NavDirections"/>
+
+        <variable
             name="model"
             type="com.currentweather.ui.main.notification.NotificationSettingsViewModel" />
     </data>
@@ -38,7 +42,7 @@
             android:id="@+id/locationLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> model.openLocation()}"
+            android:onClick="@{() -> model.openLocation(navDirection.getActionId())}"
             android:visibility="@{ongoingSwitch.checked}"
             android:padding="16dp"
             android:orientation="vertical">

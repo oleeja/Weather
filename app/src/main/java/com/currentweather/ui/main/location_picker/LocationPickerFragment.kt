@@ -15,9 +15,10 @@ import com.currentweather.ui.main.notification.NotificationSettingsFragment
 import com.currentweather.ui.views.AbstractMapView
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.fragment_location_picker.*
+import org.koin.android.ext.android.getKoin
 import org.koin.androidx.scope.currentScope
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
 
 
 class LocationPickerFragment : Fragment() {
@@ -25,6 +26,8 @@ class LocationPickerFragment : Fragment() {
     private val map: AbstractMapView by currentScope.inject()
 
     private lateinit var locationPickerViewModel: LocationPickerViewModel
+
+    private val viewModelScope = getKoin().getOrCreateScope("LocationPickerFragment", named<LocationPickerFragment>())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +53,7 @@ class LocationPickerFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = FragmentLocationPickerBinding.inflate(inflater, container, false).also {
         val backStack = findNavController().backStack
-        val locationPickerViewModel: LocationPickerViewModel by currentScope.viewModel<LocationPickerViewModel>(this,
-        parameters = {
+        val parameters = {
             parametersOf(
                 when (backStack.elementAt(backStack.size-2).destination.label) {
                     LoadingFragment::class.java.simpleName -> LocationType.APP_LOCATION
@@ -59,8 +61,8 @@ class LocationPickerFragment : Fragment() {
                     else -> LocationType.APP_LOCATION
                 }
             )
-        })
-        this.locationPickerViewModel = locationPickerViewModel
+        }
+        this.locationPickerViewModel = viewModelScope.get(parameters = parameters)
         lifecycle.addObserver(locationPickerViewModel)
         it.mapContainer.addView(map.apply {
             addPickLocationListener { locationPickerViewModel.setLocation(it) }
@@ -100,6 +102,7 @@ class LocationPickerFragment : Fragment() {
     override fun onDestroyView() {
         mapContainer.removeView(map)
         map.onDestroy()
+        viewModelScope.close()
         super.onDestroyView()
     }
 
@@ -112,7 +115,6 @@ class LocationPickerFragment : Fragment() {
         super.onLowMemory()
         map.onLowMemory()
     }
-
 
     private fun setPickupResult() {
         locationPickerViewModel.getLocation().let {

@@ -1,7 +1,7 @@
 package com.currentweather.ui.main.notification
 
 import com.currentweather.data.CurrentWeatherRepositoryImpl
-import com.currentweather.data.LocationRepositoryImpl
+import com.currentweather.data.OnGoingLocationRepositoryImpl
 import com.currentweather.domain.CurrentWeatherRepository
 import com.currentweather.domain.LocationRepository
 import com.currentweather.domain.OnGoingRefreshRepository
@@ -25,7 +25,7 @@ val notificationRepositoryModule = module {
                 get()
             )
         }
-        scoped<LocationRepository> {LocationRepositoryImpl(get(), get(), get()) }
+        scoped<LocationRepository> {OnGoingLocationRepositoryImpl(get(), get(), get()) }
         scoped<CurrentWeatherRepository> {CurrentWeatherRepositoryImpl(get()) }
     }
 }

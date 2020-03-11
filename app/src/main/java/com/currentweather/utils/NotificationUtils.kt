@@ -15,7 +15,14 @@ import com.currentweather.ui.launch.LaunchActivity
 
 class NotificationUtils(val context: Context) {
     @Suppress("DEPRECATION")
-    fun createCustomNotification(smallIcon: Icon?, bigIcon: Bitmap, title: String, subtitle: String, notificationId: Int, locationInfo: Location) {
+    fun createCustomNotification(
+        smallIcon: Icon?,
+        bigIcon: Bitmap,
+        title: String,
+        subtitle: String,
+        notificationId: Int,
+        locationInfo: Location
+    ) {
         val channelId = context.getString(R.string.default_ongoing_channel_id)
         val notification =
             (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) Notification.Builder(
@@ -26,7 +33,8 @@ class NotificationUtils(val context: Context) {
                 .setOngoing(true)
                 .setVibrate(null)
                 .setContentIntent(
-                    PendingIntent.getActivity(context, 0,
+                    PendingIntent.getActivity(
+                        context, 0,
                         Intent(context, LaunchActivity::class.java).apply {
                             putExtra(NOTIFICATION_TAG, locationInfo)
                         }, PendingIntent.FLAG_UPDATE_CURRENT
@@ -42,6 +50,10 @@ class NotificationUtils(val context: Context) {
                 .setLargeIcon(bigIcon)
                 .setContentTitle(title)
                 .setContentText(subtitle)
+                .setStyle(
+                    Notification.BigTextStyle()
+                        .bigText(subtitle)
+                )
                 .build()
 
         val notificationManager =
@@ -58,7 +70,6 @@ class NotificationUtils(val context: Context) {
     }
 
     companion object {
-        val SPLASH_ACTIVITY_NAME = "com.wunderground.android.weather.ui.splash.WeatherHomeActivity"
         val NOTIFICATION_TAG = "ongoingNotification"
     }
 }

@@ -53,7 +53,7 @@ class NotificationUiHandler(
     ) {
         onGoingNotificationDataModel.let {
             val icon = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    Icon.createWithBitmap(statusBarIconUtils.getTemperatureBitmap(it.temperature))
+                Icon.createWithBitmap(statusBarIconUtils.getTemperatureBitmap(it.temperature))
             } else null
 
             updateTime = onGoingNotificationDataModel.updatedTime ?: System.currentTimeMillis()
@@ -67,7 +67,15 @@ class NotificationUiHandler(
                 )
                     ?: BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher),
                 title,
-                onGoingNotificationDataModel.tempMax.toString() + "," + onGoingNotificationDataModel.tempMax,
+                with(onGoingNotificationDataModel) {
+                    String.format(
+                        context.resources.getString(R.string.notification_subtitle_format),
+                        temperature,
+                        humidity,
+                        tempMax,
+                        tempMin
+                    )
+                },
                 ONGOING_NOTIFICATION_ID,
                 it.locationInfo
             )

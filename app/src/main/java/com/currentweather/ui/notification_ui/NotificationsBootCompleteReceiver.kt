@@ -10,13 +10,16 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import org.koin.core.qualifier.named
 
 /**
  * Receiver that catch moment after rebooting device and restore notification if it was enabled
  */
-class NotificationsBootCompleteReceiver : BroadcastReceiver(), KoinComponent{
+class NotificationsBootCompleteReceiver : BroadcastReceiver(), KoinComponent {
 
-    private val notificationUiHandler: OnGoingNotificationHandler by inject()
+    private val scopeInstance =
+        getKoin().createScope(notificationBackgroundScopeId, named<NotificationUiHandler>())
+    private val notificationUiHandler = scopeInstance.get<OnGoingNotificationHandler>()
 
     private val notificationSettings: NotificationSettings by inject()
 

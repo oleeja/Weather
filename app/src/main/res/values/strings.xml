@@ -24,6 +24,7 @@
     <string name="sb_settings_refresh_interval_daily">Once daily</string>
 
     <string name="sb_settings_location">Current location</string>
+    <string name="notification_subtitle_format">Temp: %1$d°, humidity: %2$d%%, max.temp: %3$d°, min.temp: %4$d°</string>
 
     <string-array name="sb_refresh_interval_default_list">
         <item>@string/sb_settings_refresh_interval_30m</item>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:installLocation="internalOnly"
     package="com.currentweather">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -24,6 +26,14 @@
         <activity android:name=".ui.main.MainActivity" >
             <nav-graph android:value="@navigation/nav_graph"/>
         </activity>
+
+        <receiver
+            android:name=".ui.notification_ui.NotificationsBootCompleteReceiver"
+            android:label="NotificationsBootCompleteReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

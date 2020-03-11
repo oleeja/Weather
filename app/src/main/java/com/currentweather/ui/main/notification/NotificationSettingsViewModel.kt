@@ -29,6 +29,10 @@ class NotificationSettingsViewModel(
         MutableLiveData(notificationSettings)
     }
 
+    val newDestination by lazy {
+        MutableLiveData<Int>()
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun getData() {
         viewModelScope.launch(handler) {
@@ -58,8 +62,9 @@ class NotificationSettingsViewModel(
         notifyPropertyChanged(BR.notificationLocation)
     }
 
-    fun openLocation(){
-
+    fun openLocation(destinationId: Int){
+        newDestination.value = destinationId
+        newDestination.value = null
     }
 
     fun saveSettings() {

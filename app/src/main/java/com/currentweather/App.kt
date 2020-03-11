@@ -13,6 +13,7 @@ import com.currentweather.ui.main.notification.notificationSettingsViewModule
 import com.currentweather.ui.main.settings.settingsViewModule
 import com.currentweather.ui.main.units.unitsRepositoryModule
 import com.currentweather.ui.main.units.unitsViewModule
+import com.currentweather.ui.notification_ui.notificationBackgroundModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -23,7 +24,7 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(commonModule + dataSourceModule + retrofitNetworkModule + utilsModule + onGoingNotificationModule)
+            modules(commonModule + dataSourceModule + retrofitNetworkModule + utilsModule + onGoingNotificationModule + notificationBackgroundModule)
             modules(
                 loadingRepositoryModule + weatherViewModule + weatherRepositoryModule
                         + settingsViewModule + unitsViewModule + unitsRepositoryModule

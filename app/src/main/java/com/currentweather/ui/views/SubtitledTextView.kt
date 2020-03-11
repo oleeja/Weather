@@ -2,10 +2,12 @@ package com.currentweather.ui.views
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
+import android.view.View
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.AppCompatTextView
@@ -41,8 +43,9 @@ class SubtitledTextView : AppCompatTextView {
     @SuppressLint("RestrictedApi")
     private fun initPopupMenu() {
         this.setOnClickListener { view ->
-            MenuPopupHelper(context,
-                    PopupMenu(context, rootView).apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                MenuPopupHelper(context,
+                    PopupMenu(context, this).apply {
                         popupSuggestionsList.forEach { menu.add(0, 0, it.position, it.title) }
                         setOnMenuItemClickListener { item ->
                             chosenPosition = item.order
@@ -50,14 +53,29 @@ class SubtitledTextView : AppCompatTextView {
                             if (::onMenuSuggestionListener.isInitialized) onMenuSuggestionListener.invoke(getCurrentSuggestion())
                             true
                         }
-                    }.menu as MenuBuilder, rootView).apply {
-                val location = IntArray(2)
-                getLocationOnScreen(location)
-                show(location[0] + paddingStart, location[1] + baseline)
+                    }.menu as MenuBuilder, this).apply {
+                    val location = IntArray(2)
+                    getLocationOnScreen(location)
+                    show(location[0] + paddingStart, 0)
+                }
+            } else {
+                showLegacyPopup(view)
             }
         }
-
     }
+
+    private fun showLegacyPopup(view: View) {
+        val menu = PopupMenu(context, view)
+        popupSuggestionsList.forEach { menu.menu.add(0, 0, it.position, it.title) }
+        menu.setOnMenuItemClickListener {
+            chosenPosition = it.order
+            setSubTitle(popupSuggestionsList[chosenPosition].title)
+            if (::onMenuSuggestionListener.isInitialized) onMenuSuggestionListener.invoke(getCurrentSuggestion())
+            true
+        }
+        menu.show()
+    }
+
 
     private fun getSubtitleText(titleText: String, subtitleText: String) = SpannableString(titleText + "\n"
             + subtitleText).apply {
