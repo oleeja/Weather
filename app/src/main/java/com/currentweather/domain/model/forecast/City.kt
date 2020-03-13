@@ -1,9 +1,10 @@
 package com.currentweather.domain.model.forecast
 
+import androidx.room.Entity
 import com.currentweather.domain.model.Coord
 import com.google.gson.annotations.SerializedName
 
-
+@Entity
 data class City(
     @SerializedName("coord")
     val coord: Coord,

@@ -20,7 +20,7 @@ val weatherViewModule = module{
 
 val weatherRepositoryModule = module {
     scope(named<WeatherFragment>()){
-        scoped<CurrentWeatherRepository> { CurrentWeatherRepositoryImpl(get()) }
+        scoped<CurrentWeatherRepository> { CurrentWeatherRepositoryImpl(get(), get()) }
         scoped<ForecastRepository> { ForecastThreeHoursRepositoryImpl(get()) }
         scoped<LocationRepository> { LocationRepositoryImpl(get(), get(), get()) }
         scoped<UnitsRepository> { UnitsRepositoryImpl(get()) }

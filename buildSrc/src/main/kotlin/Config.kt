@@ -17,7 +17,7 @@ object Config {
 
     private object Versions {
         // Tools
-        const val kotlinVersion = "1.3.61"
+        const val kotlinVersion = "1.3.70"
         const val androidGradleVersion = "3.6.0"
         const val ktxCoreVersion = "1.1.0"
         const val playServicesVersion = "17.0.0"
@@ -33,6 +33,7 @@ object Config {
         const val lifecycleVersion = "2.2.0"
         const val googleMapVersion = "17.0.0"
         const val workVersion = "2.3.2"
+        const val roomVersion = "2.2.4"
 
         // Third-party libs
         const val koinVersion = "2.0.1"
@@ -58,7 +59,6 @@ object Config {
         const val kotlinStd = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlinVersion}"
         const val ktxCore = "androidx.core:core-ktx:${Versions.ktxCoreVersion}"
         const val playServicesLocation = "com.google.android.gms:play-services-location:${Versions.playServicesVersion}"
-        const val playServicesMaps = "com.google.android.gms:play-services-maps:${Versions.playServicesVersion}"
         val navigationSafeArgs = "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
     }
 
@@ -84,6 +84,8 @@ object Config {
         val navigation_ui = "androidx.navigation:navigation-ui-ktx:$nav_version"
         val googleMap = "com.google.android.gms:play-services-maps:${Versions.googleMapVersion}"
         val workManager = "androidx.work:work-runtime-ktx:${Versions.workVersion}"
+        val room = "androidx.room:room-runtime:${Versions.roomVersion}"
+        val roomKtx = "androidx.room:room-ktx:${Versions.roomVersion}"
     }
 
     object ThirdPartyLibs {
@@ -114,5 +116,10 @@ object Config {
         const val androidXTestRunner = "androidx.test:runner:${Versions.androidXTestRunnerVersion}"
         const val androidXTestRules = "androidx.test:rules:${Versions.androidXTestRulesVersion}"
         const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutinesVersion}"
+        const val roomTest = "androidx.room:room-testing:${Versions.roomVersion}"
+    }
+
+    object AnnotationProcessors{
+        const val room = "androidx.room:room-compiler:${Versions.roomVersion}"
     }
 }

@@ -1,11 +1,12 @@
 package com.currentweather.domain.model.forecast
 
+import androidx.room.Entity
 import com.currentweather.domain.model.Clouds
 import com.currentweather.domain.model.Main
 import com.currentweather.domain.model.Weather
 import com.currentweather.domain.model.Wind
 import com.google.gson.annotations.SerializedName
-
+@Entity
 data class ForecastThreeHours(
     @SerializedName("clouds")
     val clouds: Clouds,

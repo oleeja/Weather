@@ -26,6 +26,6 @@ val notificationRepositoryModule = module {
             )
         }
         scoped<LocationRepository> {OnGoingLocationRepositoryImpl(get(), get(), get()) }
-        scoped<CurrentWeatherRepository> {CurrentWeatherRepositoryImpl(get()) }
+        scoped<CurrentWeatherRepository> {CurrentWeatherRepositoryImpl(get(), get()) }
     }
 }

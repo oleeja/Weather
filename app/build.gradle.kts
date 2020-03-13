@@ -57,6 +57,8 @@ dependencies {
     implementation(Config.Android.navigation_ui)
     implementation(Config.Android.googleMap)
     implementation(Config.Android.workManager)
+    implementation(Config.Android.room)
+    implementation(Config.Android.roomKtx)
 
     implementation(Config.ThirdPartyLibs.koinCore)
     implementation(Config.ThirdPartyLibs.koinScope)
@@ -75,12 +77,15 @@ dependencies {
 
     implementation(Config.ThirdPartyLibs.picasso)
 
+    kapt(Config.AnnotationProcessors.room)
+
     testImplementation(Config.TestingLibs.junit)
     testImplementation(Config.TestingLibs.koinTest)
     testImplementation(Config.TestingLibs.mockitoKotlin)
     testImplementation(Config.TestingLibs.mockitoInline)
     testImplementation(Config.TestingLibs.androidXCoreTesting)
     testImplementation(Config.TestingLibs.coroutinesTest)
+    testImplementation(Config.TestingLibs.roomTest)
 
     androidTestImplementation(Config.TestingLibs.androidxJunit)
     androidTestImplementation(Config.TestingLibs.espressoCore)

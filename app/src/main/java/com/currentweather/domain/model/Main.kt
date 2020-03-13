@@ -1,7 +1,9 @@
 package com.currentweather.domain.model
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
+@Entity
 data class Main(
     @SerializedName("feels_like")
     val feelsLike: Double,

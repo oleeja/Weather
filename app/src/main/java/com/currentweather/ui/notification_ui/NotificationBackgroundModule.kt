@@ -11,7 +11,7 @@ import org.koin.dsl.module
 
 val notificationBackgroundModule = module {
     scope(named<NotificationUiHandler>()) {
-        scoped <CurrentWeatherRepository> { CurrentWeatherRepositoryImpl(get()) }
+        scoped <CurrentWeatherRepository> { CurrentWeatherRepositoryImpl(get(), get()) }
         scoped <LocationRepository> { OnGoingLocationRepositoryImpl(get(), get(), get()) }
     }
 }

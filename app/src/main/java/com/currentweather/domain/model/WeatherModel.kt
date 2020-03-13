@@ -1,7 +1,11 @@
 package com.currentweather.domain.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+
+@Entity
 data class WeatherModel(
     @SerializedName("base")
     val base: String,
@@ -17,6 +21,7 @@ data class WeatherModel(
     val id: Int,
     @SerializedName("main")
     val main: Main,
+    @PrimaryKey
     @SerializedName("name")
     val name: String,
     @SerializedName("sys")

@@ -2,6 +2,7 @@ package com.currentweather.ui.di
 
 import com.currentweather.CoroutineContextProvider
 import com.currentweather.DefaultCoroutineContextProvider
+import com.currentweather.dao.WeatherDatabase
 import com.currentweather.data_sources.AppLocationDataSource
 import com.currentweather.data_sources.LastKnownLocationDataSource
 import com.currentweather.data_sources.UnitsDataSource
@@ -31,6 +32,7 @@ val dataSourceModule = module {
     single { UpdateLocationDataSource(get()) }
     single { UnitsDataSource(androidContext()) }
     single { AppLocationDataSource(androidContext()) }
+    single { WeatherDatabase.getInstance(androidContext()).userDao() }
 }
 
 val utilsModule = module {
