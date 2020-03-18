@@ -3,23 +3,29 @@ package com.currentweather.utils
 import androidx.room.TypeConverter
 import com.currentweather.domain.model.*
 import com.google.gson.Gson
+import com.google.gson.JsonIOException
+import com.google.gson.TypeAdapter
 import com.google.gson.reflect.TypeToken
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonToken
+import java.io.StringReader
 import java.lang.reflect.Type
 import java.util.*
 
-open class WeatherListTypeConverter<T>(val clazz: Class<T>){
+open class WeatherListTypeConverter<T>(private val type: Type){
     @TypeConverter
-    fun fromList(list: List<T>): String? {
-        return Gson().toJson(list)
+    fun fromList(list: List<T>?): String? {
+        if (list == null) {
+            return null
+        }
+        return Gson().toJson(list, type)
     }
 
     @TypeConverter
-    fun toList(data: String): List<T?>? {
+    fun toList(data: String?): List<T?>? {
         if (data == null) {
             return Collections.emptyList()
         }
-        val type: Type = object :
-            TypeToken<List<T>>() {}.type
         return Gson().fromJson(
             data,
             type
@@ -35,17 +41,11 @@ open class WeatherObjectTypeConverter<T>(val clazz: Class<T>){
 
     @TypeConverter
     fun toObject(json: String): T? {
-        val type: Type = object :
-            TypeToken<T>() {}.type
         return Gson().fromJson(json, clazz)
-    }
-
-    private inline fun <reified R: T> f(json: String) : R?{
-        return Gson().fromJson(json, R::class.java)
     }
 }
 
-class ListWeatherConverter : WeatherObjectTypeConverter<java.util.ArrayList<Weather>>(java.util.ArrayList<Weather>::class.java)
+class ListWeatherConverter : WeatherListTypeConverter<Weather>(object : TypeToken<List<Weather>>(){}.type)
 class CloudsConverter : WeatherObjectTypeConverter<Clouds>(Clouds::class.java)
 class CoordConverter : WeatherObjectTypeConverter<Coord>(Coord::class.java)
 class MainConverter : WeatherObjectTypeConverter<Main>(Main::class.java)
