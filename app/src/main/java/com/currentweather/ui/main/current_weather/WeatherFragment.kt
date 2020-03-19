@@ -59,7 +59,8 @@ class WeatherFragment : BaseFragment() {
                         }
                         is Location -> {
                             context?.let {
-                                (activity as AppCompatActivity).supportActionBar?.title = result.data.getDisplayingName(it)
+                                (activity as AppCompatActivity).supportActionBar?.title =
+                                    result.data.getDisplayingName(it)
                             }
                         }
                         else -> {

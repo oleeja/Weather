@@ -4,8 +4,11 @@ import android.location.Location
 import com.currentweather.api.WeatherService
 import com.currentweather.dao.CurrentWeatherDao
 import com.currentweather.domain.CurrentWeatherRepository
+import com.currentweather.domain.model.Coord
 import com.currentweather.domain.model.WeatherModel
 import okhttp3.Response
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
 
 class CurrentWeatherRepositoryImpl(
@@ -15,11 +18,12 @@ class CurrentWeatherRepositoryImpl(
 
     override suspend fun getWeatherData(location: Location): WeatherModel {
         val cachedData = try {
-            currentWeatherDao.getLastCurrentWeather()
+            currentWeatherDao.getLastCurrentWeather(
+                Coord(location.latitude.round2Decimal(), location.longitude.round2Decimal()))
         } catch (e: Exception) {
             null
         }
-        if (cachedData!= null && cachedData.dt * 1000L <= System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5)) {
+        if (cachedData!= null && cachedData.dt * 1000L + TimeUnit.MINUTES.toMillis(5) >= System.currentTimeMillis() ) {
             return cachedData
         }
         val data = try {
@@ -41,4 +45,7 @@ class CurrentWeatherRepositoryImpl(
             cachedData ?: throw Exception("Can't receive weather data")
         }
     }
+
+    private fun Double.round2Decimal() =
+        DecimalFormat("#.##").apply { roundingMode = RoundingMode.CEILING }.format(this).toDouble()
 }

@@ -12,8 +12,7 @@ import com.currentweather.domain.model.Unit
 import com.currentweather.domain.model.WeatherModel
 import com.currentweather.domain.model.forecast.ForecastThreeHoursModel
 import com.currentweather.ui.base.BaseViewModel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 
 class WeatherViewModel(
@@ -26,13 +25,13 @@ class WeatherViewModel(
 
     var isLoading = ObservableBoolean()
 
-    var orientation : Int = Configuration.ORIENTATION_PORTRAIT
+    var orientation: Int = Configuration.ORIENTATION_PORTRAIT
 
     override fun handleException(exception: Throwable) {
-        data.value =
-            ViewState.Error(
-                exception
-            )
+        data.postValue( ViewState.Error(
+            exception
+        ))
+
     }
 
     private val data by lazy {
@@ -41,42 +40,40 @@ class WeatherViewModel(
 
     fun getViewModelLiveData(): LiveData<ViewState> = data
 
-    val currentWeatherData by lazy{
+    val currentWeatherData by lazy {
         MutableLiveData<WeatherModel>()
     }
 
-    val forecastWeatherData by lazy{
+    val forecastWeatherData by lazy {
         MutableLiveData<ForecastThreeHoursModel>()
     }
 
-    val currentUnits by lazy{
+    val currentUnits by lazy {
         MutableLiveData<Unit>()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun getData() {
         viewModelScope.launch(handler) {
-            val location = withContext(coroutineContextProvider.io()) {
-                locationRepository.getLocation()
-            }
-            currentWeatherData.value = withContext(coroutineContextProvider.io()) {
-                currentWeatherRepository.getWeatherData(location)
-            }
-            forecastWeatherData.value = withContext(coroutineContextProvider.io()) {
-                forecastRepository.getForecast(location)
-            }
             currentUnits.value = withContext(coroutineContextProvider.io()) {
-                unitsRepository.getAppUnits()
-            }
-            data.value =
+            unitsRepository.getAppUnits()
+        } }
+        viewModelScope.launch(handler+coroutineContextProvider.io()) {
+            val location = locationRepository.getLocation()
+            data.postValue(
                 ViewState.Success(
                     location
-                )
-            currentWeatherData.value?.let { data.value = ViewState.Success(it) }
+                ))
+            viewModelScope.launch(handler) {
+                forecastWeatherData.postValue(forecastRepository.getForecast(location))
+            }
+            currentWeatherData.postValue(currentWeatherRepository.getWeatherData(location))
+
+            currentWeatherData.value?.let { data.postValue(ViewState.Success(it)) }
         }
     }
 
-    fun onRefresh(){
+    fun onRefresh() {
         isLoading.set(true)
         getData()
         isLoading.set(false)
