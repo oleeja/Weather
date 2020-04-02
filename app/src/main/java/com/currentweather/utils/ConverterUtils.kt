@@ -4,4 +4,4 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 
 fun Double.round2Decimal() =
-    DecimalFormat("#.##").apply { roundingMode = RoundingMode.CEILING }.format(this).toDouble()
+    DecimalFormat("#.##").apply { roundingMode = RoundingMode.FLOOR }.format(this).toDouble()

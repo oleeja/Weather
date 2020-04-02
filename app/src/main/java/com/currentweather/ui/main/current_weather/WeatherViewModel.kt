@@ -13,7 +13,7 @@ import com.currentweather.domain.model.Unit
 import com.currentweather.domain.model.WeatherModel
 import com.currentweather.domain.model.forecast.ForecastThreeHoursModel
 import com.currentweather.ui.base.BaseViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 
 
 class WeatherViewModel(
@@ -29,9 +29,11 @@ class WeatherViewModel(
     var orientation: Int = Configuration.ORIENTATION_PORTRAIT
 
     override fun handleException(exception: Throwable) {
-        data.postValue( ViewState.Error(
-            exception
-        ))
+        data.postValue(
+            ViewState.Error(
+                exception
+            )
+        )
     }
 
     private val data by lazy {
@@ -58,17 +60,16 @@ class WeatherViewModel(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun getData() {
-        viewModelScope.launch(handler) {
-            currentUnits.value = withContext(coroutineContextProvider.io()) {
-            unitsRepository.getAppUnits()
-        } }
-        viewModelScope.launch(handler+coroutineContextProvider.io()) {
+        viewModelScope.launch(handler + coroutineContextProvider.io()) {
+            currentUnits.postValue(unitsRepository.getAppUnits())
+        }
+        viewModelScope.launch(handler + coroutineContextProvider.io()) {
             val currentLocation = locationRepository.getLocation()
             location.postValue(currentLocation)
+            currentWeatherData.postValue(currentWeatherRepository.getWeatherData(currentLocation))
             viewModelScope.launch(handler) {
                 forecastWeatherData.postValue(forecastRepository.getForecast(currentLocation))
             }
-            currentWeatherData.postValue(currentWeatherRepository.getWeatherData(currentLocation))
         }
     }
 

@@ -50,6 +50,7 @@ class LoadingFragment : BaseFragment() {
             when (result) {
                 is LoadingViewModel.LoadingState.LOADED -> {
                     findNavController().navigate(R.id.action_loadingFragment_to_mainActivity)
+                    activity?.finish()
                 }
                 is LoadingViewModel.LoadingState.NOT_LOADED -> Toast.makeText(
                     context,

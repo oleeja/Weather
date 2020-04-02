@@ -13,6 +13,6 @@ abstract class CurrentWeatherDao {
     abstract suspend fun insertCurrentWeather(model: WeatherModel)
 
     @Update(onConflict = OnConflictStrategy.IGNORE)
-    abstract suspend fun updateCurrentWeather(model: WeatherModel)
+    abstract suspend fun updateCurrentWeather(model: WeatherModel): Int
 
 }

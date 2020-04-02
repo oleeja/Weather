@@ -6,15 +6,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.currentweather.domain.model.WeatherModel
-import com.currentweather.domain.model.forecast.City
 import com.currentweather.domain.model.forecast.ForecastThreeHoursModel
-import com.currentweather.domain.model.forecast.Rain
 import com.currentweather.utils.*
 
 /**
  * The Room database that contains the Users table
  */
-@Database(entities = [WeatherModel::class, ForecastThreeHoursModel::class, City::class], version = 1, exportSchema = false)
+@Database(
+    entities = [WeatherModel::class, ForecastThreeHoursModel::class],
+    version = 1,
+    exportSchema = false
+)
 @TypeConverters(ListWeatherConverter::class, CloudsConverter::class,
     CoordConverter::class, MainConverter::class, SysConverter::class,
     WindConverter::class, ListForecastThreeHoursConverter::class,
