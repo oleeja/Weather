@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit
 class ForecastThreeHoursRepositoryImpl(private val dataSource : WeatherService, private val forecastThreeHoursDao: ForecastThreeHoursDao)  : ForecastRepository {
     override suspend fun getForecast(location: Location): ForecastThreeHoursModel {
         val cachedData = try {
-            //TODO: After changing models make normal request to db
             forecastThreeHoursDao.getForecast(
                 Coord(
                     location.latitude.round2Decimal(),
