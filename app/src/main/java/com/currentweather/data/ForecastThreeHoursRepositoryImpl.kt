@@ -13,13 +13,12 @@ class ForecastThreeHoursRepositoryImpl(private val dataSource : WeatherService, 
     override suspend fun getForecast(location: Location): ForecastThreeHoursModel {
         val cachedData = try {
             //TODO: After changing models make normal request to db
-            val forecastData = forecastThreeHoursDao.getForecast()
-            forecastData.find {
-                it.coord == Coord(
+            forecastThreeHoursDao.getForecast(
+                Coord(
                     location.latitude.round2Decimal(),
                     location.longitude.round2Decimal()
                 )
-            }
+            )
         } catch (e: Exception) {
             null
         }
