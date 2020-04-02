@@ -32,7 +32,8 @@ val dataSourceModule = module {
     single { UpdateLocationDataSource(get()) }
     single { UnitsDataSource(androidContext()) }
     single { AppLocationDataSource(androidContext()) }
-    single { WeatherDatabase.getInstance(androidContext()).userDao() }
+    single { WeatherDatabase.getInstance(androidContext()).currentWeatherDao() }
+    single { WeatherDatabase.getInstance(androidContext()).forecastThreeHoursDao() }
 }
 
 val utilsModule = module {

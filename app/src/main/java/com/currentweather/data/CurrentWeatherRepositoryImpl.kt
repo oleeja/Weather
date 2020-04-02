@@ -6,6 +6,7 @@ import com.currentweather.dao.CurrentWeatherDao
 import com.currentweather.domain.CurrentWeatherRepository
 import com.currentweather.domain.model.Coord
 import com.currentweather.domain.model.WeatherModel
+import com.currentweather.utils.round2Decimal
 import okhttp3.Response
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -45,7 +46,4 @@ class CurrentWeatherRepositoryImpl(
             cachedData ?: throw Exception("Can't receive weather data")
         }
     }
-
-    private fun Double.round2Decimal() =
-        DecimalFormat("#.##").apply { roundingMode = RoundingMode.CEILING }.format(this).toDouble()
 }

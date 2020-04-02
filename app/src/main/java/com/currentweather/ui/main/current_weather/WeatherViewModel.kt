@@ -1,6 +1,7 @@
 package com.currentweather.ui.main.current_weather
 
 import android.content.res.Configuration
+import android.location.Location
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.*
 import com.currentweather.CoroutineContextProvider
@@ -31,7 +32,6 @@ class WeatherViewModel(
         data.postValue( ViewState.Error(
             exception
         ))
-
     }
 
     private val data by lazy {
@@ -52,6 +52,10 @@ class WeatherViewModel(
         MutableLiveData<Unit>()
     }
 
+    val location by lazy {
+        MutableLiveData<Location>()
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun getData() {
         viewModelScope.launch(handler) {
@@ -59,17 +63,12 @@ class WeatherViewModel(
             unitsRepository.getAppUnits()
         } }
         viewModelScope.launch(handler+coroutineContextProvider.io()) {
-            val location = locationRepository.getLocation()
-            data.postValue(
-                ViewState.Success(
-                    location
-                ))
+            val currentLocation = locationRepository.getLocation()
+            location.postValue(currentLocation)
             viewModelScope.launch(handler) {
-                forecastWeatherData.postValue(forecastRepository.getForecast(location))
+                forecastWeatherData.postValue(forecastRepository.getForecast(currentLocation))
             }
-            currentWeatherData.postValue(currentWeatherRepository.getWeatherData(location))
-
-            currentWeatherData.value?.let { data.postValue(ViewState.Success(it)) }
+            currentWeatherData.postValue(currentWeatherRepository.getWeatherData(currentLocation))
         }
     }
 

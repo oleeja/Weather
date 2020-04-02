@@ -16,5 +16,6 @@ data class ForecastThreeHoursModel(
     @SerializedName("list")
     val list: List<ForecastThreeHours>,
     @SerializedName("message")
-    val message: Int
+    val message: Int,
+    val dt: Long = System.currentTimeMillis()
 )

@@ -2,6 +2,9 @@ package com.currentweather.utils
 
 import androidx.room.TypeConverter
 import com.currentweather.domain.model.*
+import com.currentweather.domain.model.forecast.City
+import com.currentweather.domain.model.forecast.ForecastThreeHours
+import com.currentweather.domain.model.forecast.Rain
 import com.google.gson.Gson
 import com.google.gson.JsonIOException
 import com.google.gson.TypeAdapter
@@ -46,8 +49,12 @@ open class WeatherObjectTypeConverter<T>(val clazz: Class<T>){
 }
 
 class ListWeatherConverter : WeatherListTypeConverter<Weather>(object : TypeToken<List<Weather>>(){}.type)
+class ListForecastThreeHoursConverter : WeatherListTypeConverter<ForecastThreeHours>(object : TypeToken<List<ForecastThreeHours>>(){}.type)
 class CloudsConverter : WeatherObjectTypeConverter<Clouds>(Clouds::class.java)
 class CoordConverter : WeatherObjectTypeConverter<Coord>(Coord::class.java)
 class MainConverter : WeatherObjectTypeConverter<Main>(Main::class.java)
 class SysConverter : WeatherObjectTypeConverter<Sys>(Sys::class.java)
 class WindConverter : WeatherObjectTypeConverter<Wind>(Wind::class.java)
+class CityConverter : WeatherObjectTypeConverter<City>(City::class.java)
+class RainConverter : WeatherObjectTypeConverter<Rain>(Rain::class.java)
+class SysForecastConverter : WeatherObjectTypeConverter<com.currentweather.domain.model.forecast.Sys>(com.currentweather.domain.model.forecast.Sys::class.java)

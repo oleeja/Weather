@@ -52,24 +52,21 @@ class WeatherFragment : BaseFragment() {
     private fun subscribeUi() {
         weatherViewModel.getViewModelLiveData().observe(viewLifecycleOwner, Observer { result ->
             when (result) {
-                is WeatherViewModel.ViewState.Success -> {
-                    when (result.data) {
-                        is WeatherModel -> {
-                            setBarColors(result.data.dt)
-                        }
-                        is Location -> {
-                            context?.let {
-                                (activity as AppCompatActivity).supportActionBar?.title =
-                                    result.data.getDisplayingName(it)
-                            }
-                        }
-                        else -> {
-                        }
-                    }
-                }
+                is WeatherViewModel.ViewState.Success -> {}
                 is WeatherViewModel.ViewState.Error -> {
                     Toast.makeText(context, result.throwable.message, Toast.LENGTH_SHORT).show()
                 }
+            }
+        })
+
+        weatherViewModel.currentWeatherData.observe(viewLifecycleOwner, Observer {
+            setBarColors(it.dt)
+        })
+
+        weatherViewModel.location.observe(viewLifecycleOwner, Observer { location ->
+            context?.let {
+                (activity as AppCompatActivity).supportActionBar?.title =
+                    location.getDisplayingName(it)
             }
         })
     }
