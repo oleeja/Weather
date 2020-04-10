@@ -21,7 +21,7 @@ class NotificationUiHandler(
     private val notificationUtils: NotificationUtils,
     private val currentWeatherRepository: CurrentWeatherRepository,
     private val locationRepository: LocationRepository,
-    private val notificationSettings: NotificationSettings,
+    notificationSettings: NotificationSettings,
     private val drawableUtils: DrawableUtils
 ) : OnGoingNotificationHandler {
 

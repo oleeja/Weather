@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@id/locationPickerFragment"
-        android:title="Change location" />
+        android:title="@string/change_location" />
 
     <item
         android:id="@id/settingsFragment"
-        android:title="Settings" />
+        android:title="@string/settings_text" />
 </menu>

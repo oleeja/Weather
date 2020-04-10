@@ -19,7 +19,7 @@
             android:textColor="@android:color/black"
             android:onClick="@{() -> model.onUnitsClicked()}"
             android:textSize="20sp"
-            android:text="Units"/>
+            android:text="@string/units_text" />
 
         <View
             android:layout_width="match_parent"

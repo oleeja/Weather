@@ -1,4 +1,4 @@
-package com.wunderground.android.weather.app.status_bar_notifications_manager
+package com.currentweather.data_sources
 
 import android.content.Context
 import androidx.work.ExistingPeriodicWorkPolicy

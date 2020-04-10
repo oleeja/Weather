@@ -1,12 +1,13 @@
-package com.wunderground.android.weather.app.status_bar_notifications_manager
+package com.currentweather.data_sources
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.currentweather.ui.notification_ui.OnGoingNotificationDataModel
 import com.google.gson.Gson
 
 class NotificationDataCache (val context: Context) {
 
-    val prefs =
+    private val prefs: SharedPreferences =
         context.getSharedPreferences(PREF_ONGOING_NOTIFICATION_CACHE_FILENAME, Context.MODE_PRIVATE)
 
     fun saveNotificationData(onGoingNotificationDataModel: OnGoingNotificationDataModel) {

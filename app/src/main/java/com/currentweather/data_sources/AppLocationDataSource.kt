@@ -12,11 +12,11 @@ class AppLocationDataSource(context: Context) {
 
     private val APP_LOCATION = "APP_LOCATION"
 
-    suspend fun saveLocation(latLng: LatLng){
+    fun saveLocation(latLng: LatLng) {
         locationPreferences.edit().putString(APP_LOCATION, "${latLng.latitude},${latLng.longitude}").apply()
     }
 
-    suspend fun getLocation(): Location?{
+    fun getLocation(): Location? {
         return with(locationPreferences.getString(APP_LOCATION, null)){
             if(this != null) Location(LocationManager.PASSIVE_PROVIDER).apply {
                 val latLng = this@with.split(",")

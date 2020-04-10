@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.currentweather.R
 import com.currentweather.databinding.FragmentLocationPickerBinding
 import com.currentweather.ui.launch.loading.LoadingFragment
 import com.currentweather.ui.main.notification.NotificationSettingsFragment
@@ -65,14 +66,15 @@ class LocationPickerFragment : Fragment() {
         this.locationPickerViewModel = viewModelScope.get(parameters = parameters)
         lifecycle.addObserver(locationPickerViewModel)
         it.mapContainer.addView(map.apply {
-            addPickLocationListener { locationPickerViewModel.setLocation(it) }
+            addPickLocationListener { latLng -> locationPickerViewModel.setLocation(latLng) }
         })
     }.root
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         map.onCreate(savedInstanceState)
-        (activity as AppCompatActivity).supportActionBar?.title = "Pick Place"
+        (activity as AppCompatActivity).supportActionBar?.title =
+            getString(R.string.pick_place_title)
         locationPickerViewModel.currentWeatherData.observe(viewLifecycleOwner, Observer { result ->
             map.setPosition(LatLng(result.latitude, result.longitude))
             map.setZoom(INITIAL_ZOOM_LEVEL)
@@ -127,7 +129,6 @@ class LocationPickerFragment : Fragment() {
     }
 
     companion object {
-        val PICK_LOCATION_KEY = "PICK_LOCATION_KEY"
-        private val INITIAL_ZOOM_LEVEL = 7f
+        private const val INITIAL_ZOOM_LEVEL = 7f
     }
 }

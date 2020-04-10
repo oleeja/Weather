@@ -1,6 +1,7 @@
 package com.currentweather.domain.model.notification
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.location.Location
 import com.google.gson.Gson
 
@@ -11,7 +12,7 @@ import com.google.gson.Gson
  */
 class NotificationSettings(val context: Context) {
 
-    val prefs =
+    private val prefs: SharedPreferences =
         context.getSharedPreferences(
             PREF_ONGOING_NOTIFICATION_SETTINGS_FILENAME,
             Context.MODE_PRIVATE

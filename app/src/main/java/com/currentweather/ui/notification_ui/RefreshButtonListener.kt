@@ -19,8 +19,4 @@ class RefreshButtonListener : BroadcastReceiver(), KoinComponent{
             notificationUiHandler.showNotification()
         }
     }
-
-    companion object {
-        val TAG = RefreshButtonListener::class.java.simpleName
-    }
 }

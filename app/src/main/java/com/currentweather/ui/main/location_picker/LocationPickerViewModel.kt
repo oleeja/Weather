@@ -38,7 +38,7 @@ class LocationPickerViewModel(private val coroutineContextProvider: CoroutineCon
     }
 
     override fun handleException(exception: Throwable) {
-        //TODO: handle exeption
+        //TODO: handle exception
        Log.d("", "")
     }
 

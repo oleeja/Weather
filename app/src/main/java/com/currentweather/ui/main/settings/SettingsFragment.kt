@@ -25,7 +25,7 @@ class SettingsFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        (activity as AppCompatActivity).supportActionBar?.title = "Settings"
+        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.settings_text)
         settingsViewModel.getViewModelLiveData().observe(viewLifecycleOwner, Observer { result ->
             when (result) {
                 SettingsViewModel.Settings.UNITS -> findNavController().navigate(R.id.action_settingsFragment_to_unitsFragment)
