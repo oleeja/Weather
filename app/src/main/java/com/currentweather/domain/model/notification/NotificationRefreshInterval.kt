@@ -9,7 +9,11 @@ import com.currentweather.R
  *
  * @author Oleh Nahornyi
  */
-sealed class NotificationRefreshInterval constructor(val id: Int, val intervalMillis: Long, val textResId: Int) {
+sealed class NotificationRefreshInterval constructor(
+    val id: Int,
+    val intervalMillis: Long,
+    private val textResId: Int
+) {
 
     class RI_30_MINUTES : NotificationRefreshInterval(0, 30 * 60000, R.string.ri_30minutes)
     class RI_1_HOUR : NotificationRefreshInterval(1, 60 * 60000, R.string.ri_1hour)

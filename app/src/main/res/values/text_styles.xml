@@ -36,7 +36,7 @@
         <item name="android:fontFamily">@font/roboto</item>
     </style>
 
-    <style name="TextRobotoRegularMediumLagre" parent="BaseTextRobotoRegular">
+    <style name="TextRobotoRegularMediumLarge" parent="BaseTextRobotoRegular">
         <item name="android:textSize">22sp</item>
     </style>
 

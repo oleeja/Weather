@@ -91,7 +91,7 @@ class PhotoPointInfoWindow : CardView {
     }
 
     /**
-     * Shows pickup spot ratin
+     * Shows pickup spot rating
      * @param rating string that shows rating
      */
     fun setPickupRating(rating: Float) {

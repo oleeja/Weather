@@ -3,6 +3,7 @@ package com.currentweather.ui.main.units
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.currentweather.databinding.FragmentUnitsBinding
 import com.currentweather.ui.base.BaseFragment
 import org.koin.androidx.scope.currentScope
@@ -19,4 +20,9 @@ class UnitsFragment : BaseFragment() {
         lifecycle.addObserver(unitsViewModel)
         it.model = unitsViewModel
     }.root
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        (activity as AppCompatActivity).supportActionBar?.title = ""
+    }
 }

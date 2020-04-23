@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.ColorRes
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -41,10 +42,10 @@ fun convertBooleanToVisibility(visible: Boolean?) = if(visible == null || visibl
 @BindingAdapter("android:text")
 fun getLocationName(textView: AppCompatTextView, location: Location?) {
     if(location == null) textView.context.resources.getString(R.string.sb_settings_location)
-    else textView.setText(location.getDisplayingName(textView.context))
+    else textView.text = location.getDisplayingName(textView.context)
 }
 
-@BindingAdapter("app:backroundColor")
+@BindingAdapter("app:backgroundColor")
 fun convertTimeStampToColor(view: View, timestamp: Long?) {
     view.setBackgroundColor(
         ContextCompat.getColor(
@@ -54,7 +55,7 @@ fun convertTimeStampToColor(view: View, timestamp: Long?) {
     )
 }
 
-@BindingAdapter("app:backroundColorSecondary")
+@BindingAdapter("app:backgroundColorSecondary")
 fun convertTimeStampToColorSecondary(view: View, timestamp: Long?) {
     view.setBackgroundColor(
         ContextCompat.getColor(
@@ -91,7 +92,7 @@ fun getResourceBackgroundSecondary(timestamp: Long?): Int {
 }
 
 @BindingAdapter("app:icon")
-fun setIcon(view: ImageView, iconCode: String?) {
+fun setIcon(view: AppCompatImageView, iconCode: String?) {
     Picasso.with(view.context).load("http://openweathermap.org/img/wn/$iconCode@2x.png").into(view)
 }
 

@@ -25,6 +25,19 @@
 
     <string name="sb_settings_location">Current location</string>
     <string name="notification_subtitle_format">Temp: %1$d°, humidity: %2$d%%, max.temp: %3$d°, min.temp: %4$d°</string>
+    <string name="ongoing_notification">Ongoing Notification</string>
+    <string name="location_text">Location</string>
+    <string name="units_text">Units</string>
+    <string name="widgets_text">Widgets - soon</string>
+    <string name="change_location">Change location</string>
+    <string name="settings_text">Settings</string>
+    <string name="unit_kelvin">Kelvin</string>
+    <string name="unit_celsius">Celsius</string>
+    <string name="unit_fahrenheit">Fahrenheit</string>
+    <string name="unit_pressure_pa">hPa</string>
+    <string name="unit_wind_met">met/s</string>
+    <string name="unit_wind_mil">mil/h</string>
+    <string name="pick_place_title">Pick Place</string>
 
     <string-array name="sb_refresh_interval_default_list">
         <item>@string/sb_settings_refresh_interval_30m</item>

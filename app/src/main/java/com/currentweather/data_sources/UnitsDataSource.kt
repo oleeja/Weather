@@ -2,6 +2,7 @@ package com.currentweather.data_sources
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.currentweather.R
 import com.currentweather.domain.model.Unit
 import com.google.gson.Gson
 
@@ -14,9 +15,27 @@ class UnitsDataSource(context: Context) {
     private val APP_UNIT = "APP_UNIT"
 
     private val unitList = arrayListOf(
-        Unit("Standard", "", "Kelvin", "met/s", "hPa"),
-        Unit("Metric", "metric", "Celsius", "met/s", "hPa"),
-        Unit("Imperial", "imperial", "Fahrenheit", "mil/h", "hPa")
+        Unit(
+            "Standard",
+            "",
+            context.getString(R.string.unit_kelvin),
+            context.getString(R.string.unit_wind_met),
+            context.getString(R.string.unit_pressure_pa)
+        ),
+        Unit(
+            "Metric",
+            "metric",
+            context.getString(R.string.unit_celsius),
+            context.getString(R.string.unit_wind_met),
+            context.getString(R.string.unit_pressure_pa)
+        ),
+        Unit(
+            "Imperial",
+            "imperial",
+            context.getString(R.string.unit_fahrenheit),
+            context.getString(R.string.unit_wind_mil),
+            context.getString(R.string.unit_pressure_pa)
+        )
     )
 
     fun getUnits() = unitList
@@ -25,7 +44,7 @@ class UnitsDataSource(context: Context) {
         unitPreferences.edit().putString(APP_UNIT, Gson().toJson(unit)).apply()
     }
 
-    fun getAppUnit() = with(unitPreferences.getString(APP_UNIT, "")) {
+    fun getAppUnit(): Unit = with(unitPreferences.getString(APP_UNIT, "")) {
         if (!this.isNullOrBlank()) Gson().fromJson(
             this,
             Unit::class.java

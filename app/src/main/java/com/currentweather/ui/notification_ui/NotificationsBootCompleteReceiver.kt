@@ -33,8 +33,4 @@ class NotificationsBootCompleteReceiver : BroadcastReceiver(), KoinComponent {
             }
         }
     }
-
-    companion object {
-        val TAG = NotificationsBootCompleteReceiver::class.java.simpleName
-    }
 }

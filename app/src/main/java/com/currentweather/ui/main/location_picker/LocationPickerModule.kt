@@ -2,7 +2,6 @@ package com.currentweather.ui.main.location_picker
 
 import com.currentweather.data.LocationRepositoryImpl
 import com.currentweather.data.OnGoingLocationRepositoryImpl
-import com.currentweather.domain.LocationRepository
 import com.currentweather.ui.views.AbstractMapView
 import com.currentweather.ui.views.GoogleMapView
 import org.koin.android.ext.koin.androidContext
@@ -19,7 +18,7 @@ val locationPickerViewModule = module {
 
 val locationPickerRepositoryModule = module {
     scope(named<LocationPickerFragment>()) {
-        scoped<LocationRepository> { (params: LocationPickerFragment.LocationType) ->
+        scoped { (params: LocationPickerFragment.LocationType) ->
             when (params) {
                 LocationPickerFragment.LocationType.APP_LOCATION -> LocationRepositoryImpl(
                     get(),

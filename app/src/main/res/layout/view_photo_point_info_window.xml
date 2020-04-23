@@ -28,7 +28,6 @@
             android:background="@android:color/black"
             android:textColor="@android:color/white"
             android:drawableStart="@drawable/ic_star_12dp"
-            android:drawableLeft="@drawable/ic_star_12dp"
             style="@style/TextHeeboSmall"
             tools:text="4.5" />
     </FrameLayout>

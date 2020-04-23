@@ -1,14 +1,7 @@
-
-private const val kotlinVersion = "1.3.61"
-private const val androidGradleVersion = "3.5.3"
-
 // Compile dependencies
 private const val retrofitVersion = "2.7.1"
 private const val okhttpVersion = "3.9.1"
 private const val picassoVersion = "2.5.2"
-
-// Unit tests
-private const val mockitoVersion = "2.13.0"
 
 //Navigation
 private const val nav_version = "2.3.0-alpha02"
@@ -28,7 +21,6 @@ object Config {
         const val constraintLayoutVersion = "1.1.3"
         const val cardViewVersion = "1.0.0"
         const val swiperefreshlayoutVersion = "1.0.0"
-        const val broadcastManagerVersion = "1.0.0"
         const val fragmentVersion = "1.2.0"
         const val lifecycleVersion = "2.2.0"
         const val googleMapVersion = "17.0.0"
@@ -59,7 +51,8 @@ object Config {
         const val kotlinStd = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlinVersion}"
         const val ktxCore = "androidx.core:core-ktx:${Versions.ktxCoreVersion}"
         const val playServicesLocation = "com.google.android.gms:play-services-location:${Versions.playServicesVersion}"
-        val navigationSafeArgs = "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        const val navigationSafeArgs =
+            "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
     }
 
     object Android {
@@ -80,12 +73,13 @@ object Config {
         const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifecycleVersion}"
         const val lifecycleLivedata = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycleVersion}"
         const val lifecycleViewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}"
-        val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:$nav_version"
-        val navigation_ui = "androidx.navigation:navigation-ui-ktx:$nav_version"
-        val googleMap = "com.google.android.gms:play-services-maps:${Versions.googleMapVersion}"
-        val workManager = "androidx.work:work-runtime-ktx:${Versions.workVersion}"
-        val room = "androidx.room:room-runtime:${Versions.roomVersion}"
-        val roomKtx = "androidx.room:room-ktx:${Versions.roomVersion}"
+        const val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:$nav_version"
+        const val navigation_ui = "androidx.navigation:navigation-ui-ktx:$nav_version"
+        const val googleMap =
+            "com.google.android.gms:play-services-maps:${Versions.googleMapVersion}"
+        const val workManager = "androidx.work:work-runtime-ktx:${Versions.workVersion}"
+        const val room = "androidx.room:room-runtime:${Versions.roomVersion}"
+        const val roomKtx = "androidx.room:room-ktx:${Versions.roomVersion}"
     }
 
     object ThirdPartyLibs {

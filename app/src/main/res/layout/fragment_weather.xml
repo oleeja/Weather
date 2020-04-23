@@ -27,9 +27,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rootBackground"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                app:backroundColor="@{model.currentWeatherData.dt}"
+                app:backgroundColor="@{model.currentWeatherData.dt}"
                 tools:background="@color/eveningPrimary">
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -167,7 +167,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 tools:listitem="@layout/item_forecast_three_hours"
-                app:backroundColorSecondary="@{model.currentWeatherData.dt}"
+                app:backgroundColorSecondary="@{model.currentWeatherData.dt}"
                 app:itemLayout="@{@layout/item_forecast_three_hours}"
                 app:items="@{model.forecastWeatherData.list}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

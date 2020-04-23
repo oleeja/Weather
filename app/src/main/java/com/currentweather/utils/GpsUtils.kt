@@ -73,6 +73,6 @@ class GpsUtils(private val context: Context?) {
     }
 
     companion object {
-        val GPS_REQUEST = 101
+        const val GPS_REQUEST = 101
     }
 }

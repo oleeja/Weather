@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.currentweather.ui.base.BaseViewModel
 
-class SettingsViewModel() : BaseViewModel() {
+class SettingsViewModel : BaseViewModel() {
 
     private val settings by lazy {
         MutableLiveData<Settings>()

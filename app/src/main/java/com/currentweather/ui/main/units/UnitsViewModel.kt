@@ -12,8 +12,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class UnitsViewModel(
-    val unitsRepository: UnitsRepository,
-    val coroutineContextProvider: CoroutineContextProvider
+    private val unitsRepository: UnitsRepository,
+    private val coroutineContextProvider: CoroutineContextProvider
 ) : BaseObservableViewModel(), LifecycleObserver {
     private val units by lazy {
         MutableLiveData<List<Unit>>()

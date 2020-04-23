@@ -19,11 +19,12 @@
             android:layout_height="wrap_content"
             app:dateTime="@{model.dt}"/>
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageWeather"
             android:layout_margin="@dimen/margin_default_half"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@null"
             app:icon="@{model.weather.get(0).icon}" />
 
         <androidx.appcompat.widget.AppCompatTextView
